@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Zap, Wind, Magnet, Droplets, Bomb, Banana, ArrowRightLeft, Skateboarding } from "lucide-react";
+import { Zap, Wind, Magnet, Droplets, Bomb } from "lucide-react";
 import AppLayout from "@/components/layout/AppLayout";
 import duckAvatar1 from "@/assets/duck-avatar-1.png";
 import duckAvatar2 from "@/assets/duck-avatar-2.png";
