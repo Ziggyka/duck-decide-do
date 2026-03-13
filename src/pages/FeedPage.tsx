@@ -41,7 +41,7 @@ const posts: FeedPost[] = [
     user: "QuackQueen",
     avatar: duckAvatar3,
     type: "achievement",
-    content: "Desbloqueou a conquista "Explorador" — visitou 10 restaurantes diferentes! 🏆",
+    content: "Desbloqueou a conquista Explorador — visitou 10 restaurantes diferentes! 🏆",
     likes: 42,
     comments: 12,
     time: "4h atrás",
