@@ -97,10 +97,7 @@ const ProfilePage = () => {
                 <UserPlus className="w-4 h-4" />
                 Adicionar
               </button>
-              <button className="pato-btn-bounce flex items-center gap-2 border border-border px-4 py-2 rounded-xl text-sm font-medium hover:bg-muted transition-colors">
-                <Mail className="w-4 h-4" />
-                Mensagem
-              </button>
+              <EditProfileDialog profile={profile} onSave={setProfile} />
             </div>
           </div>
         </div>
