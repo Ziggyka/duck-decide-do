@@ -26,7 +26,7 @@ const activities = [
   { name: "Escape Room", cat: "Eventos", rating: 0, status: "Quero fazer" },
 ];
 
-const tabs = ["Atividades", "Listas", "Conquistas", "Pato Vidente", "Memórias", "Amigos"];
+const tabs = ["Atividades", "Listas", "Conquistas", "Memórias", "Amigos"];
 
 const statusColor: Record<string, string> = {
   "Feito": "bg-success/15 text-success",
