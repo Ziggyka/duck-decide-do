@@ -19,7 +19,7 @@ const RightSidebar = () => {
           <span className="text-xs font-semibold text-primary">Sugestão da IA</span>
         </div>
         <p className="text-sm font-medium">"Hoje é um bom dia para maratonar um anime com amigos! 🍿"</p>
-        <button className="mt-3 w-full text-xs font-semibold text-accent hover:underline">
+        <button className="mt-3 w-full text-xs font-semibold text-primary hover:underline">
           Ver sugestões →
         </button>
       </div>
