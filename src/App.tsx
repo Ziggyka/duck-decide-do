@@ -11,6 +11,7 @@ import GroupsPage from "./pages/GroupsPage";
 import InventoryPage from "./pages/InventoryPage";
 import MemoriesPage from "./pages/MemoriesPage";
 import RankingPage from "./pages/RankingPage";
+import PatoVidentePage from "./pages/PatoVidentePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
