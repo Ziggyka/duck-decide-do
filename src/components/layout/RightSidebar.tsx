@@ -16,7 +16,7 @@ const RightSidebar = () => {
       <div className="pato-card border-primary/30 bg-pink-soft">
         <div className="flex items-center gap-2 mb-2">
           <Sparkles className="w-4 h-4 text-accent" />
-          <span className="text-xs font-semibold text-accent">Sugestão da IA</span>
+          <span className="text-xs font-semibold text-primary">Sugestão da IA</span>
         </div>
         <p className="text-sm font-medium">"Hoje é um bom dia para maratonar um anime com amigos! 🍿"</p>
         <button className="mt-3 w-full text-xs font-semibold text-accent hover:underline">
