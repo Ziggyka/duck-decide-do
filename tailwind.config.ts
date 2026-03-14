@@ -66,6 +66,11 @@ export default {
           foreground: "hsl(var(--success-foreground))",
         },
         streak: "hsl(var(--streak))",
+        "neon-pink": "hsl(var(--neon-pink))",
+        "neon-green": "hsl(var(--neon-green))",
+        "neon-purple": "hsl(var(--neon-purple))",
+        "neon-cyan": "hsl(var(--neon-cyan))",
+        "neon-orange": "hsl(var(--neon-orange))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
@@ -111,12 +116,20 @@ export default {
           "100%": { width: "var(--xp-width)" },
         },
         "pulse-glow": {
-          "0%, 100%": { boxShadow: "0 0 10px hsl(41 100% 62% / 0.3)" },
-          "50%": { boxShadow: "0 0 25px hsl(41 100% 62% / 0.6)" },
+          "0%, 100%": { boxShadow: "0 0 10px hsl(330 90% 60% / 0.3)" },
+          "50%": { boxShadow: "0 0 30px hsl(330 90% 60% / 0.6)" },
         },
         "float": {
           "0%, 100%": { transform: "translateY(0)" },
           "50%": { transform: "translateY(-6px)" },
+        },
+        "shimmer": {
+          "0%": { backgroundPosition: "-200% 0" },
+          "100%": { backgroundPosition: "200% 0" },
+        },
+        "neon-pulse": {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.7" },
         },
       },
       animation: {
@@ -128,6 +141,8 @@ export default {
         "xp-fill": "xp-fill 1s ease-out forwards",
         "pulse-glow": "pulse-glow 2s infinite",
         "float": "float 3s ease-in-out infinite",
+        "shimmer": "shimmer 3s infinite linear",
+        "neon-pulse": "neon-pulse 2s ease-in-out infinite",
       },
     },
   },
