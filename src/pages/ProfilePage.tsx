@@ -54,10 +54,10 @@ const ProfilePage = () => {
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-1">
-                <h1 className="text-2xl">QuackMaster</h1>
+                <h1 className="text-2xl">{profile.name}</h1>
                 <span className="tag-pill bg-primary/15 text-primary-foreground font-semibold">🦆 Pato Lendário</span>
               </div>
-              <p className="text-sm text-muted-foreground mb-3">Explorando o mundo uma atividade por vez! 🌍</p>
+              <p className="text-sm text-muted-foreground mb-3">{profile.bio}</p>
               
               {/* XP Bar */}
               <div className="mb-3">
