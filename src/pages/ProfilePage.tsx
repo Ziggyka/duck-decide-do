@@ -49,7 +49,7 @@ const ProfilePage = () => {
         <div className="pato-card p-6">
           <div className="flex items-start gap-6">
             <div className="relative">
-              <img src={duckAvatar1} alt="avatar" className="w-24 h-24 rounded-2xl bg-duck-yellow-light border-4 border-primary glow-duck" />
+              <img src={profile.avatarUrl} alt="avatar" className="w-24 h-24 rounded-2xl bg-duck-yellow-light border-4 border-primary glow-duck" />
               <span className="absolute -bottom-2 -right-2 bg-primary text-primary-foreground text-xs font-bold px-2 py-0.5 rounded-full">Lv.24</span>
             </div>
             <div className="flex-1">
