@@ -109,8 +109,8 @@ export default {
           "100%": { width: "var(--xp-width)" },
         },
         "pulse-glow": {
-          "0%, 100%": { boxShadow: "0 0 10px hsl(41 100% 62% / 0.3)" },
-          "50%": { boxShadow: "0 0 25px hsl(41 100% 62% / 0.6)" },
+          "0%, 100%": { boxShadow: "0 0 10px hsl(316 100% 45% / 0.3)" },
+          "50%": { boxShadow: "0 0 25px hsl(316 100% 45% / 0.6)" },
         },
         "float": {
           "0%, 100%": { transform: "translateY(0)" },

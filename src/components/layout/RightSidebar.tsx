@@ -13,7 +13,7 @@ const RightSidebar = () => {
   return (
     <aside className="sidebar-right py-4 px-3 flex flex-col gap-4">
       {/* AI Suggestion */}
-      <div className="pato-card border-accent/30 bg-light-blue-soft">
+      <div className="pato-card border-primary/30 bg-pink-soft">
         <div className="flex items-center gap-2 mb-2">
           <Sparkles className="w-4 h-4 text-accent" />
           <span className="text-xs font-semibold text-accent">Sugestão da IA</span>

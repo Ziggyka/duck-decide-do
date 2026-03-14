@@ -1,4 +1,4 @@
-import { UserPlus, Mail, Star, Award, Camera, Users, ListChecks } from "lucide-react";
+import { UserPlus, Star, Camera, ListChecks } from "lucide-react";
 import duckAvatar1 from "@/assets/duck-avatar-1.png";
 import duckAvatar2 from "@/assets/duck-avatar-2.png";
 import duckAvatar3 from "@/assets/duck-avatar-3.png";

@@ -31,6 +31,7 @@ const App = () => (
           <Route path="/inventory" element={<InventoryPage />} />
           <Route path="/memories" element={<MemoriesPage />} />
           <Route path="/ranking" element={<RankingPage />} />
+          <Route path="/pato-vidente" element={<PatoVidentePage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
