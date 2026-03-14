@@ -35,7 +35,7 @@ const statusColor: Record<string, string> = {
 };
 
 const ProfilePage = () => {
-  const [activeTab, setActiveTab] = useState("Pato Vidente");
+  const [activeTab, setActiveTab] = useState("Atividades");
   const [profile, setProfile] = useState({
     name: "QuackMaster",
     bio: "Explorando o mundo uma atividade por vez! 🌍",
