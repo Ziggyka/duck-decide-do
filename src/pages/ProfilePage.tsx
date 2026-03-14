@@ -132,7 +132,7 @@ const ProfilePage = () => {
           </div>
         )}
 
-        {activeTab === "Pato Vidente" && <PatoVidenteTab />}
+        
 
         {activeTab === "Atividades" && (
           <div className="space-y-3 animate-fade-in">
