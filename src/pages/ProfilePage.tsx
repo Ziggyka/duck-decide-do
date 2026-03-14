@@ -3,6 +3,8 @@ import duckAvatar1 from "@/assets/duck-avatar-1.png";
 import duckAvatar2 from "@/assets/duck-avatar-2.png";
 import duckAvatar3 from "@/assets/duck-avatar-3.png";
 import AppLayout from "@/components/layout/AppLayout";
+import EditProfileDialog from "@/components/profile/EditProfileDialog";
+import PatoVidenteTab from "@/components/profile/PatoVidenteTab";
 import { useState } from "react";
 
 const badges = [
@@ -24,7 +26,7 @@ const activities = [
   { name: "Escape Room", cat: "Eventos", rating: 0, status: "Quero fazer" },
 ];
 
-const tabs = ["Atividades", "Listas", "Conquistas", "Memórias", "Amigos"];
+const tabs = ["Atividades", "Listas", "Conquistas", "Pato Vidente", "Memórias", "Amigos"];
 
 const statusColor: Record<string, string> = {
   "Feito": "bg-success/15 text-success",
@@ -33,7 +35,12 @@ const statusColor: Record<string, string> = {
 };
 
 const ProfilePage = () => {
-  const [activeTab, setActiveTab] = useState("Conquistas");
+  const [activeTab, setActiveTab] = useState("Pato Vidente");
+  const [profile, setProfile] = useState({
+    name: "QuackMaster",
+    bio: "Explorando o mundo uma atividade por vez! 🌍",
+    avatarUrl: duckAvatar1,
+  });
 
   return (
     <AppLayout>
@@ -42,15 +49,15 @@ const ProfilePage = () => {
         <div className="pato-card p-6">
           <div className="flex items-start gap-6">
             <div className="relative">
-              <img src={duckAvatar1} alt="avatar" className="w-24 h-24 rounded-2xl bg-duck-yellow-light border-4 border-primary glow-duck" />
+              <img src={profile.avatarUrl} alt="avatar" className="w-24 h-24 rounded-2xl bg-duck-yellow-light border-4 border-primary glow-duck" />
               <span className="absolute -bottom-2 -right-2 bg-primary text-primary-foreground text-xs font-bold px-2 py-0.5 rounded-full">Lv.24</span>
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-1">
-                <h1 className="text-2xl">QuackMaster</h1>
+                <h1 className="text-2xl">{profile.name}</h1>
                 <span className="tag-pill bg-primary/15 text-primary-foreground font-semibold">🦆 Pato Lendário</span>
               </div>
-              <p className="text-sm text-muted-foreground mb-3">Explorando o mundo uma atividade por vez! 🌍</p>
+              <p className="text-sm text-muted-foreground mb-3">{profile.bio}</p>
               
               {/* XP Bar */}
               <div className="mb-3">
@@ -90,10 +97,7 @@ const ProfilePage = () => {
                 <UserPlus className="w-4 h-4" />
                 Adicionar
               </button>
-              <button className="pato-btn-bounce flex items-center gap-2 border border-border px-4 py-2 rounded-xl text-sm font-medium hover:bg-muted transition-colors">
-                <Mail className="w-4 h-4" />
-                Mensagem
-              </button>
+              <EditProfileDialog profile={profile} onSave={setProfile} />
             </div>
           </div>
         </div>
@@ -127,6 +131,8 @@ const ProfilePage = () => {
             ))}
           </div>
         )}
+
+        {activeTab === "Pato Vidente" && <PatoVidenteTab />}
 
         {activeTab === "Atividades" && (
           <div className="space-y-3 animate-fade-in">
