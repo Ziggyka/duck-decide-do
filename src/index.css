@@ -105,10 +105,10 @@
     @apply flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors duration-150 cursor-pointer;
   }
   .nav-item-active {
-    @apply bg-primary/15 text-primary font-semibold;
+    @apply bg-primary/20 text-primary font-semibold shadow-sm;
   }
   .nav-item-inactive {
-    @apply text-muted-foreground hover:bg-muted hover:text-foreground;
+    @apply text-secondary-foreground/60 hover:bg-secondary-foreground/10 hover:text-secondary-foreground;
   }
   .duck-avatar {
     @apply rounded-full bg-duck-yellow-light border-2 border-duck-yellow flex items-center justify-center overflow-hidden;
