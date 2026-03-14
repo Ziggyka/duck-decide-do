@@ -56,11 +56,9 @@ export default {
           light: "hsl(var(--duck-yellow-light))",
           dark: "hsl(var(--duck-yellow-dark))",
         },
-        "dark-blue": "hsl(var(--dark-blue))",
-        "light-blue": {
-          DEFAULT: "hsl(var(--light-blue))",
-          soft: "hsl(var(--light-blue-soft))",
-        },
+        "dark-bg": "hsl(var(--dark-bg))",
+        "pink-glow": "hsl(var(--pink-glow))",
+        "pink-soft": "hsl(var(--pink-soft))",
         success: {
           DEFAULT: "hsl(var(--success))",
           foreground: "hsl(var(--success-foreground))",
