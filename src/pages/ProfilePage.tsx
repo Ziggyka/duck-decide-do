@@ -3,6 +3,8 @@ import duckAvatar1 from "@/assets/duck-avatar-1.png";
 import duckAvatar2 from "@/assets/duck-avatar-2.png";
 import duckAvatar3 from "@/assets/duck-avatar-3.png";
 import AppLayout from "@/components/layout/AppLayout";
+import EditProfileDialog from "@/components/profile/EditProfileDialog";
+import PatoVidenteTab from "@/components/profile/PatoVidenteTab";
 import { useState } from "react";
 
 const badges = [
