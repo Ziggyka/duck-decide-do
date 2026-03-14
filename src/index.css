@@ -6,64 +6,57 @@
 
 @layer base {
   :root {
-    --background: 260 20% 8%;
-    --foreground: 0 0% 96%;
+    --background: 210 17% 97%;
+    --foreground: 220 26% 14%;
 
-    --card: 260 18% 12%;
-    --card-foreground: 0 0% 96%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 26% 14%;
 
-    --popover: 260 18% 12%;
-    --popover-foreground: 0 0% 96%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 26% 14%;
 
     --primary: 41 100% 62%;
-    --primary-foreground: 260 20% 8%;
+    --primary-foreground: 220 26% 14%;
 
-    --secondary: 280 80% 55%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 213 32% 17%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 260 15% 18%;
-    --muted-foreground: 260 10% 55%;
+    --muted: 210 20% 93%;
+    --muted-foreground: 215 16% 47%;
 
-    --accent: 195 100% 50%;
-    --accent-foreground: 260 20% 8%;
+    --accent: 213 100% 65%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 350 90% 55%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
 
-    --border: 260 15% 20%;
-    --input: 260 15% 20%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
     --ring: 41 100% 62%;
 
     --radius: 0.75rem;
 
-    /* Custom Pato tokens — vibrant neon palette */
+    /* Custom Pato tokens */
     --duck-yellow: 41 100% 62%;
-    --duck-yellow-light: 41 100% 85%;
+    --duck-yellow-light: 41 100% 90%;
     --duck-yellow-dark: 41 100% 50%;
-    --dark-blue: 260 20% 8%;
-    --light-blue: 195 100% 50%;
-    --light-blue-soft: 195 60% 20%;
-    --success: 155 80% 45%;
+    --dark-blue: 213 32% 17%;
+    --light-blue: 213 100% 65%;
+    --light-blue-soft: 213 100% 92%;
+    --success: 142 71% 45%;
     --success-foreground: 0 0% 100%;
     --warning: 38 92% 50%;
-    --xp-bar: 195 100% 50%;
+    --xp-bar: 213 100% 65%;
     --streak: 25 95% 53%;
     --level-glow: 41 100% 62%;
 
-    /* Neon extras */
-    --neon-pink: 330 90% 60%;
-    --neon-green: 145 100% 55%;
-    --neon-purple: 280 80% 55%;
-    --neon-cyan: 185 100% 50%;
-    --neon-orange: 25 100% 55%;
-
-    --sidebar-background: 260 18% 10%;
-    --sidebar-foreground: 0 0% 96%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 220 26% 14%;
     --sidebar-primary: 41 100% 62%;
-    --sidebar-primary-foreground: 260 20% 8%;
-    --sidebar-accent: 280 50% 20%;
-    --sidebar-accent-foreground: 0 0% 96%;
-    --sidebar-border: 260 15% 16%;
+    --sidebar-primary-foreground: 220 26% 14%;
+    --sidebar-accent: 41 100% 95%;
+    --sidebar-accent-foreground: 220 26% 14%;
+    --sidebar-border: 214 32% 91%;
     --sidebar-ring: 41 100% 62%;
   }
 }
@@ -82,27 +75,19 @@
 
 @layer components {
   .nav-top {
-    @apply h-16 flex items-center px-6 gap-4 sticky top-0 z-50 border-b border-border;
-    background: linear-gradient(90deg, hsl(260 20% 10%), hsl(280 30% 15%), hsl(260 20% 10%));
+    @apply bg-secondary text-secondary-foreground h-16 flex items-center px-6 gap-4 sticky top-0 z-50;
   }
   .sidebar-left {
-    @apply w-60 flex-shrink-0 h-[calc(100vh-4rem)] sticky top-16 overflow-y-auto border-r border-border;
-    background: linear-gradient(180deg, hsl(260 18% 10%), hsl(270 20% 8%));
+    @apply w-60 bg-card border-r border-border flex-shrink-0 h-[calc(100vh-4rem)] sticky top-16 overflow-y-auto;
   }
   .sidebar-right {
-    @apply w-72 flex-shrink-0 h-[calc(100vh-4rem)] sticky top-16 overflow-y-auto border-l border-border;
-    background: linear-gradient(180deg, hsl(260 18% 10%), hsl(270 20% 8%));
+    @apply w-72 bg-card border-l border-border flex-shrink-0 h-[calc(100vh-4rem)] sticky top-16 overflow-y-auto;
   }
   .main-content {
     @apply flex-1 min-w-0 overflow-y-auto;
   }
   .pato-card {
-    @apply rounded-2xl border border-border p-4 transition-all duration-200;
-    background: hsl(260 18% 13%);
-  }
-  .pato-card:hover {
-    border-color: hsl(280 80% 55% / 0.4);
-    box-shadow: 0 0 20px hsl(280 80% 55% / 0.1);
+    @apply bg-card rounded-2xl border border-border p-4 shadow-sm hover:shadow-md transition-shadow duration-200;
   }
   .pato-badge {
     @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium;
@@ -111,33 +96,22 @@
     @apply transition-transform duration-150 active:scale-95 hover:scale-[1.02];
   }
   .xp-bar {
-    @apply h-3 rounded-full overflow-hidden;
-    background: hsl(260 15% 18%);
+    @apply h-3 rounded-full bg-muted overflow-hidden;
   }
   .xp-bar-fill {
-    @apply h-full rounded-full transition-all duration-700 ease-out;
-    background: linear-gradient(90deg, hsl(195 100% 50%), hsl(280 80% 55%));
+    @apply h-full rounded-full bg-accent transition-all duration-700 ease-out;
   }
   .nav-item {
     @apply flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors duration-150 cursor-pointer;
   }
   .nav-item-active {
-    @apply font-semibold;
-    background: linear-gradient(135deg, hsl(330 90% 60% / 0.2), hsl(280 80% 55% / 0.2));
-    color: hsl(330 90% 60%);
-    border: 1px solid hsl(330 90% 60% / 0.3);
+    @apply bg-primary/15 text-primary font-semibold;
   }
   .nav-item-inactive {
-    @apply text-muted-foreground;
-  }
-  .nav-item-inactive:hover {
-    background: hsl(260 15% 18%);
-    color: hsl(0 0% 96%);
+    @apply text-muted-foreground hover:bg-muted hover:text-foreground;
   }
   .duck-avatar {
-    @apply rounded-full border-2 flex items-center justify-center overflow-hidden;
-    background: hsl(41 100% 85%);
-    border-color: hsl(41 100% 62%);
+    @apply rounded-full bg-duck-yellow-light border-2 border-duck-yellow flex items-center justify-center overflow-hidden;
   }
   .tag-pill {
     @apply px-2.5 py-0.5 rounded-full text-xs font-medium;
@@ -146,52 +120,18 @@
     @apply pato-card text-center p-6;
   }
   .item-card {
-    @apply pato-card flex flex-col items-center gap-2 p-5 cursor-pointer;
-  }
-  .item-card:hover {
-    border-color: hsl(41 100% 62% / 0.5);
-    box-shadow: 0 0 15px hsl(41 100% 62% / 0.15);
+    @apply pato-card flex flex-col items-center gap-2 p-5 hover:border-primary/50 cursor-pointer;
   }
 }
 
 @layer utilities {
   .text-gradient-duck {
-    background: linear-gradient(90deg, hsl(41 100% 62%), hsl(25 95% 53%));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-  .text-gradient-neon {
-    background: linear-gradient(90deg, hsl(330 90% 60%), hsl(280 80% 55%), hsl(195 100% 50%));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-  .text-gradient-cyber {
-    background: linear-gradient(90deg, hsl(195 100% 50%), hsl(145 100% 55%));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    @apply bg-gradient-to-r from-[hsl(41,100%,62%)] to-[hsl(25,95%,53%)] bg-clip-text text-transparent;
   }
   .glow-duck {
-    box-shadow: 0 0 20px hsl(41 100% 62% / 0.4), 0 0 40px hsl(41 100% 62% / 0.1);
+    box-shadow: 0 0 20px hsl(41 100% 62% / 0.3);
   }
   .glow-accent {
-    box-shadow: 0 0 20px hsl(195 100% 50% / 0.4), 0 0 40px hsl(195 100% 50% / 0.1);
-  }
-  .glow-pink {
-    box-shadow: 0 0 20px hsl(330 90% 60% / 0.4), 0 0 40px hsl(330 90% 60% / 0.1);
-  }
-  .glow-purple {
-    box-shadow: 0 0 20px hsl(280 80% 55% / 0.4), 0 0 40px hsl(280 80% 55% / 0.1);
-  }
-  .glow-green {
-    box-shadow: 0 0 20px hsl(145 100% 55% / 0.4), 0 0 40px hsl(145 100% 55% / 0.1);
-  }
-  .bg-gradient-vibrant {
-    background: linear-gradient(135deg, hsl(330 90% 60%), hsl(280 80% 55%), hsl(195 100% 50%));
-  }
-  .bg-gradient-sunset {
-    background: linear-gradient(135deg, hsl(41 100% 62%), hsl(330 90% 60%));
-  }
-  .bg-gradient-ocean {
-    background: linear-gradient(135deg, hsl(195 100% 50%), hsl(280 80% 55%));
+    box-shadow: 0 0 20px hsl(213 100% 65% / 0.3);
   }
 }
