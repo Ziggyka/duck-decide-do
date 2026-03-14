@@ -11,6 +11,7 @@ import GroupsPage from "./pages/GroupsPage";
 import InventoryPage from "./pages/InventoryPage";
 import MemoriesPage from "./pages/MemoriesPage";
 import RankingPage from "./pages/RankingPage";
+import PatoVidentePage from "./pages/PatoVidentePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/inventory" element={<InventoryPage />} />
           <Route path="/memories" element={<MemoriesPage />} />
           <Route path="/ranking" element={<RankingPage />} />
+          <Route path="/pato-vidente" element={<PatoVidentePage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

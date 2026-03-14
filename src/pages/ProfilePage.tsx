@@ -1,4 +1,4 @@
-import { UserPlus, Mail, Star, Award, Camera, Users, ListChecks } from "lucide-react";
+import { UserPlus, Star, Camera, ListChecks } from "lucide-react";
 import duckAvatar1 from "@/assets/duck-avatar-1.png";
 import duckAvatar2 from "@/assets/duck-avatar-2.png";
 import duckAvatar3 from "@/assets/duck-avatar-3.png";
@@ -26,7 +26,7 @@ const activities = [
   { name: "Escape Room", cat: "Eventos", rating: 0, status: "Quero fazer" },
 ];
 
-const tabs = ["Atividades", "Listas", "Conquistas", "Pato Vidente", "Memórias", "Amigos"];
+const tabs = ["Atividades", "Listas", "Conquistas", "Memórias", "Amigos"];
 
 const statusColor: Record<string, string> = {
   "Feito": "bg-success/15 text-success",
@@ -35,7 +35,7 @@ const statusColor: Record<string, string> = {
 };
 
 const ProfilePage = () => {
-  const [activeTab, setActiveTab] = useState("Pato Vidente");
+  const [activeTab, setActiveTab] = useState("Atividades");
   const [profile, setProfile] = useState({
     name: "QuackMaster",
     bio: "Explorando o mundo uma atividade por vez! 🌍",
@@ -132,7 +132,7 @@ const ProfilePage = () => {
           </div>
         )}
 
-        {activeTab === "Pato Vidente" && <PatoVidenteTab />}
+        
 
         {activeTab === "Atividades" && (
           <div className="space-y-3 animate-fade-in">

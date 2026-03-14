@@ -56,11 +56,9 @@ export default {
           light: "hsl(var(--duck-yellow-light))",
           dark: "hsl(var(--duck-yellow-dark))",
         },
-        "dark-blue": "hsl(var(--dark-blue))",
-        "light-blue": {
-          DEFAULT: "hsl(var(--light-blue))",
-          soft: "hsl(var(--light-blue-soft))",
-        },
+        "dark-bg": "hsl(var(--dark-bg))",
+        "pink-glow": "hsl(var(--pink-glow))",
+        "pink-soft": "hsl(var(--pink-soft))",
         success: {
           DEFAULT: "hsl(var(--success))",
           foreground: "hsl(var(--success-foreground))",
@@ -111,8 +109,8 @@ export default {
           "100%": { width: "var(--xp-width)" },
         },
         "pulse-glow": {
-          "0%, 100%": { boxShadow: "0 0 10px hsl(41 100% 62% / 0.3)" },
-          "50%": { boxShadow: "0 0 25px hsl(41 100% 62% / 0.6)" },
+          "0%, 100%": { boxShadow: "0 0 10px hsl(316 100% 45% / 0.3)" },
+          "50%": { boxShadow: "0 0 25px hsl(316 100% 45% / 0.6)" },
         },
         "float": {
           "0%, 100%": { transform: "translateY(0)" },
