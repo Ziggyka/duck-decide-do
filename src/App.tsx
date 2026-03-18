@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import FeedPage from "./pages/FeedPage";
 import ProfilePage from "./pages/ProfilePage";
 import ListsPage from "./pages/ListsPage";
+import QuacksPage from "./pages/QuacksPage";
 import DrawPage from "./pages/DrawPage";
 import GroupsPage from "./pages/GroupsPage";
 import InventoryPage from "./pages/InventoryPage";
