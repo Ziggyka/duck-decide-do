@@ -12,6 +12,7 @@ import InventoryPage from "./pages/InventoryPage";
 import MemoriesPage from "./pages/MemoriesPage";
 import RankingPage from "./pages/RankingPage";
 import PatoVidentePage from "./pages/PatoVidentePage";
+import SettingsPage from "./pages/SettingsPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
