@@ -1,12 +1,13 @@
 import { 
   Newspaper, ListChecks, Shuffle, Users, Swords, Trophy, 
-  Camera, User, Package, Settings, Flame, Sparkles 
+  Camera, User, Package, Settings, Flame, Sparkles, MessageCircle 
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const navItems = [
   { icon: Newspaper, label: "Feed", path: "/" },
   { icon: Sparkles, label: "Pato Vidente", path: "/pato-vidente" },
+  { icon: MessageCircle, label: "Meus Quacks", path: "/quacks" },
   { icon: ListChecks, label: "Minhas Listas", path: "/lists" },
   { icon: Shuffle, label: "Sorteio", path: "/draw" },
   { icon: Users, label: "Grupos", path: "/groups" },

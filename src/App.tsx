@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import FeedPage from "./pages/FeedPage";
 import ProfilePage from "./pages/ProfilePage";
 import ListsPage from "./pages/ListsPage";
+import QuacksPage from "./pages/QuacksPage";
 import DrawPage from "./pages/DrawPage";
 import GroupsPage from "./pages/GroupsPage";
 import InventoryPage from "./pages/InventoryPage";
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/" element={<FeedPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/lists" element={<ListsPage />} />
+          <Route path="/quacks" element={<QuacksPage />} />
           <Route path="/draw" element={<DrawPage />} />
           <Route path="/groups" element={<GroupsPage />} />
           <Route path="/inventory" element={<InventoryPage />} />

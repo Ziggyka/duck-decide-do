@@ -20,7 +20,7 @@ const TopNav = () => {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <input
             type="text"
-            placeholder="Buscar atividades, amigos, grupos..."
+            placeholder="Buscar quacks, patos, grupos..."
             className="w-full pl-10 pr-4 py-2 rounded-xl bg-secondary-foreground/10 text-secondary-foreground placeholder:text-secondary-foreground/50 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
           />
         </div>
@@ -28,9 +28,12 @@ const TopNav = () => {
 
       {/* Actions */}
       <div className="flex items-center gap-3 ml-auto">
-        <button className="pato-btn-bounce flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-xl text-sm font-semibold">
+        <button
+          onClick={() => navigate("/quacks")}
+          className="pato-btn-bounce flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-xl text-sm font-semibold"
+        >
           <Plus className="w-4 h-4" />
-          Criar Atividade
+          + Criar Quack
         </button>
 
         <button className="relative p-2 rounded-xl hover:bg-secondary-foreground/10 transition-colors">
