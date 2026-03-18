@@ -87,7 +87,7 @@ const posts: FeedPost[] = [
 ];
 
 const typeColors: Record<PostType, { bg: string; text: string; label: string }> = {
-  activity: { bg: "bg-accent/15", text: "text-accent", label: "Atividade" },
+  activity: { bg: "bg-accent/15", text: "text-accent", label: "Quack" },
   review: { bg: "bg-primary/15", text: "text-primary-foreground", label: "Avaliação" },
   achievement: { bg: "bg-success/15", text: "text-success", label: "Conquista" },
   list: { bg: "bg-muted", text: "text-muted-foreground", label: "Lista" },

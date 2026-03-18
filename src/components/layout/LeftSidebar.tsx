@@ -7,6 +7,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 const navItems = [
   { icon: Newspaper, label: "Feed", path: "/" },
   { icon: Sparkles, label: "Pato Vidente", path: "/pato-vidente" },
+  { icon: ListChecks, label: "Meus Quacks", path: "/quacks" },
   { icon: ListChecks, label: "Minhas Listas", path: "/lists" },
   { icon: Shuffle, label: "Sorteio", path: "/draw" },
   { icon: Users, label: "Grupos", path: "/groups" },

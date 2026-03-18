@@ -58,7 +58,7 @@ const ListsPage = () => {
           <h1 className="text-2xl">Minhas Listas</h1>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <input placeholder="Buscar atividade..." className="pl-10 pr-4 py-2 rounded-xl border border-border bg-card text-sm focus:outline-none focus:ring-2 focus:ring-primary/50" />
+            <input placeholder="Buscar quack..." className="pl-10 pr-4 py-2 rounded-xl border border-border bg-card text-sm focus:outline-none focus:ring-2 focus:ring-primary/50" />
           </div>
         </div>
 

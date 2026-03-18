@@ -28,9 +28,12 @@ const TopNav = () => {
 
       {/* Actions */}
       <div className="flex items-center gap-3 ml-auto">
-        <button className="pato-btn-bounce flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-xl text-sm font-semibold">
+        <button
+          onClick={() => navigate("/quacks")}
+          className="pato-btn-bounce flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-xl text-sm font-semibold"
+        >
           <Plus className="w-4 h-4" />
-          Criar Atividade
+          + Criar Quack
         </button>
 
         <button className="relative p-2 rounded-xl hover:bg-secondary-foreground/10 transition-colors">
