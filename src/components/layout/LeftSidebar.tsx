@@ -1,6 +1,6 @@
 import { 
   Newspaper, ListChecks, Shuffle, Users, Swords, Trophy, 
-  Camera, User, Package, Settings, Flame, Sparkles 
+  Camera, User, Package, Settings, Flame, Sparkles, MessageCircle 
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
