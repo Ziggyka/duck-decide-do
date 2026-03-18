@@ -1,12 +1,15 @@
-import { Search, Bell, Plus, ChevronDown } from "lucide-react";
+import { Search, Bell, Plus, ChevronDown, Settings } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import patoLogo from "@/assets/pato-logo.png";
 import duckAvatar from "@/assets/duck-avatar-1.png";
 
 const TopNav = () => {
+  const navigate = useNavigate();
+
   return (
     <nav className="nav-top">
       {/* Logo */}
-      <div className="flex items-center gap-2 mr-4">
+      <div className="flex items-center gap-2 mr-4 cursor-pointer" onClick={() => navigate("/")}>
         <img src={patoLogo} alt="Pato App" className="w-8 h-8" />
         <span className="font-display font-bold text-lg text-primary">Pato App</span>
       </div>
@@ -35,7 +38,17 @@ const TopNav = () => {
           <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-destructive rounded-full border-2 border-secondary" />
         </button>
 
-        <button className="flex items-center gap-2 p-1 pr-3 rounded-xl hover:bg-secondary-foreground/10 transition-colors">
+        <button
+          onClick={() => navigate("/settings")}
+          className="p-2 rounded-xl hover:bg-secondary-foreground/10 transition-colors"
+        >
+          <Settings className="w-5 h-5 text-secondary-foreground" />
+        </button>
+
+        <button
+          onClick={() => navigate("/profile")}
+          className="flex items-center gap-2 p-1 pr-3 rounded-xl hover:bg-secondary-foreground/10 transition-colors"
+        >
           <img src={duckAvatar} alt="avatar" className="w-8 h-8 rounded-full bg-duck-yellow-light border-2 border-primary" />
           <span className="text-sm font-medium text-secondary-foreground">QuackMaster</span>
           <ChevronDown className="w-3 h-3 text-secondary-foreground/60" />

@@ -12,6 +12,7 @@ import InventoryPage from "./pages/InventoryPage";
 import MemoriesPage from "./pages/MemoriesPage";
 import RankingPage from "./pages/RankingPage";
 import PatoVidentePage from "./pages/PatoVidentePage";
+import SettingsPage from "./pages/SettingsPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
           <Route path="/memories" element={<MemoriesPage />} />
           <Route path="/ranking" element={<RankingPage />} />
           <Route path="/pato-vidente" element={<PatoVidentePage />} />
+          <Route path="/settings" element={<SettingsPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
