@@ -32,6 +32,7 @@ const App = () => (
           <Route path="/quacks" element={<QuacksPage />} />
           <Route path="/draw" element={<DrawPage />} />
           <Route path="/groups" element={<GroupsPage />} />
+          <Route path="/challenges" element={<ChallengesPage />} />
           <Route path="/inventory" element={<InventoryPage />} />
           <Route path="/memories" element={<MemoriesPage />} />
           <Route path="/ranking" element={<RankingPage />} />
