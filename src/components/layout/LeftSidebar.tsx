@@ -1,6 +1,6 @@
 import { 
   Newspaper, ListChecks, Shuffle, Users, Swords, Trophy, 
-  Camera, User, Package, Settings, Flame, Sparkles, MessageCircle 
+  Camera, User, Settings, Flame, Sparkles, MessageCircle 
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -15,7 +15,6 @@ const navItems = [
   { icon: Trophy, label: "Ranking", path: "/ranking" },
   { icon: Camera, label: "Memórias", path: "/memories" },
   { icon: User, label: "Perfil", path: "/profile" },
-  { icon: Package, label: "Inventário", path: "/inventory" },
   { icon: Settings, label: "Configurações", path: "/settings" },
 ];
 
