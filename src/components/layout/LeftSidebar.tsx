@@ -15,7 +15,6 @@ const navItems = [
   { icon: Trophy, label: "Ranking", path: "/ranking" },
   { icon: Camera, label: "Memórias", path: "/memories" },
   { icon: User, label: "Perfil", path: "/profile" },
-  { icon: Package, label: "Inventário", path: "/inventory" },
   { icon: Settings, label: "Configurações", path: "/settings" },
 ];
 
