@@ -9,6 +9,7 @@ import ListsPage from "./pages/ListsPage";
 import QuacksPage from "./pages/QuacksPage";
 import DrawPage from "./pages/DrawPage";
 import GroupsPage from "./pages/GroupsPage";
+import ChallengesPage from "./pages/ChallengesPage";
 import InventoryPage from "./pages/InventoryPage";
 import MemoriesPage from "./pages/MemoriesPage";
 import RankingPage from "./pages/RankingPage";
