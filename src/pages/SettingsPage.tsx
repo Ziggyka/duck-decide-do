@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { User, Shield, Lock, Bell, Eye, Palette, Database, AlertTriangle, ExternalLink, Globe, Clock, Monitor, Moon, Sun } from "lucide-react";
+import { User, Shield, Lock, Bell, Eye, Palette, Database, AlertTriangle, ExternalLink, Globe, Clock, Monitor, Moon, Sun, Link2 } from "lucide-react";
 import AppLayout from "@/components/layout/AppLayout";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -8,10 +8,12 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import ConnectionsTab from "@/components/settings/ConnectionsTab";
 
 const sections = [
   { id: "profile", label: "Perfil", icon: User },
   { id: "account", label: "Conta", icon: Globe },
+  { id: "connections", label: "Conexões", icon: Link2 },
   { id: "security", label: "Segurança", icon: Shield },
   { id: "privacy", label: "Privacidade", icon: Lock },
   { id: "notifications", label: "Notificações", icon: Bell },
@@ -83,6 +85,8 @@ const SettingsPage = () => {
                 </div>
               </div>
             )}
+
+            {activeSection === "connections" && <ConnectionsTab />}
 
             {activeSection === "account" && (
               <div className="pato-card p-6 space-y-5 animate-fade-in">
