@@ -1,8 +1,11 @@
-import { Sparkles, Calendar, UserPlus, Zap } from "lucide-react";
+import { useState } from "react";
+import { Sparkles, Calendar, UserPlus, Zap, MoreVertical, MessageCircle, EyeOff, UserMinus } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { toast } from "sonner";
 import duckAvatar2 from "@/assets/duck-avatar-2.png";
 import duckAvatar3 from "@/assets/duck-avatar-3.png";
 
-const onlineFriends = [
+const initialFriends = [
   { name: "DuckSlayer", avatar: duckAvatar2, status: "Jogando" },
   { name: "QuackQueen", avatar: duckAvatar3, status: "Online" },
   { name: "PatoNinja", avatar: duckAvatar2, status: "Em sorteio" },
@@ -10,6 +13,15 @@ const onlineFriends = [
 ];
 
 const RightSidebar = () => {
+  const [friends, setFriends] = useState(initialFriends);
+  const [hidden, setHidden] = useState<string[]>([]);
+
+  const visibleFriends = friends.filter(f => !hidden.includes(f.name));
+
+  const handleChat = (name: string) => toast.success(`Chat com ${name} aberto! 💬`);
+  const handleHide = (name: string) => { setHidden(prev => [...prev, name]); toast(`${name} ocultado`); };
+  const handleUnfriend = (name: string) => { setFriends(prev => prev.filter(f => f.name !== name)); toast(`Amizade com ${name} desfeita`); };
+
   return (
     <aside className="sidebar-right py-4 px-3 flex flex-col gap-4">
       {/* AI Suggestion */}
@@ -31,13 +43,31 @@ const RightSidebar = () => {
           Amigos Online
         </h3>
         <div className="space-y-2.5">
-          {onlineFriends.map((f) => (
-            <div key={f.name} className="flex items-center gap-2.5">
+          {visibleFriends.map((f) => (
+            <div key={f.name} className="flex items-center gap-2.5 group">
               <img src={f.avatar} alt={f.name} className="w-8 h-8 rounded-full bg-duck-yellow-light border border-border" />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium truncate">{f.name}</p>
                 <p className="text-xs text-muted-foreground">{f.status}</p>
               </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="opacity-0 group-hover:opacity-100 p-1 rounded-lg hover:bg-muted transition-all">
+                    <MoreVertical className="w-4 h-4 text-muted-foreground" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-44">
+                  <DropdownMenuItem onClick={() => handleChat(f.name)} className="gap-2 cursor-pointer">
+                    <MessageCircle className="w-4 h-4" /> Chamar para chat
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleHide(f.name)} className="gap-2 cursor-pointer">
+                    <EyeOff className="w-4 h-4" /> Ocultar
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleUnfriend(f.name)} className="gap-2 cursor-pointer text-destructive focus:text-destructive">
+                    <UserMinus className="w-4 h-4" /> Desfazer amizade
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           ))}
         </div>

@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { Package } from "lucide-react";
 import AppLayout from "@/components/layout/AppLayout";
+import RouletteWheel from "@/components/draw/RouletteWheel";
 import duckAvatar1 from "@/assets/duck-avatar-1.png";
 import duckAvatar2 from "@/assets/duck-avatar-2.png";
 import duckAvatar3 from "@/assets/duck-avatar-3.png";
 
 const modes = [
   { name: "Roleta", emoji: "🎰", desc: "Gire a roleta e descubra" },
-  { name: "Corrida de Patos", emoji: "🏁", desc: "Corrida com sabotagens!", active: true },
+  { name: "Corrida de Patos", emoji: "🏁", desc: "Corrida com sabotagens!" },
   { name: "Torneio", emoji: "⚔️", desc: "Eliminatórias 1v1" },
   { name: "Modo Veto", emoji: "🚫", desc: "Elimine até sobrar um" },
   { name: "Surpresa", emoji: "🎁", desc: "Aleatório total" },
@@ -63,7 +64,7 @@ const rarityColor: Record<string, string> = {
 };
 
 const DrawPage = () => {
-  const [selectedMode, setSelectedMode] = useState("Corrida de Patos");
+  const [selectedMode, setSelectedMode] = useState("Roleta");
   const [activeTab, setActiveTab] = useState<"sorteio" | "inventario">("sorteio");
   const [selectedCat, setSelectedCat] = useState("Itens de Corrida");
 
@@ -107,8 +108,16 @@ const DrawPage = () => {
               ))}
             </div>
 
+            {/* Roulette Mode */}
+            {selectedMode === "Roleta" && (
+              <div className="pato-card p-6 animate-fade-in">
+                <h2 className="font-display text-lg font-bold mb-6">🎰 Roleta da Sorte</h2>
+                <RouletteWheel />
+              </div>
+            )}
+
             {selectedMode === "Corrida de Patos" && (
-              <div className="flex gap-4">
+              <div className="flex gap-4 animate-fade-in">
                 {/* Race Track */}
                 <div className="flex-1 pato-card p-6">
                   <div className="flex items-center justify-between mb-4">
@@ -117,7 +126,6 @@ const DrawPage = () => {
                       Iniciar Corrida!
                     </button>
                   </div>
-
                   <div className="space-y-4">
                     {racers.map((r, i) => (
                       <div key={r.name} className="flex items-center gap-3">
@@ -129,10 +137,7 @@ const DrawPage = () => {
                             <span className="text-muted-foreground">{r.user}</span>
                           </div>
                           <div className="h-8 rounded-full bg-muted relative overflow-hidden">
-                            <div
-                              className="h-full rounded-full bg-gradient-to-r from-primary to-accent transition-all duration-1000 ease-out flex items-center justify-end pr-2"
-                              style={{ width: `${r.progress}%` }}
-                            >
+                            <div className="h-full rounded-full bg-gradient-to-r from-primary to-accent transition-all duration-1000 ease-out flex items-center justify-end pr-2" style={{ width: `${r.progress}%` }}>
                               <span className="text-xs font-bold">🦆</span>
                             </div>
                             <div className="absolute right-0 top-0 bottom-0 w-1 bg-foreground/20" />
@@ -156,7 +161,6 @@ const DrawPage = () => {
                       ))}
                     </div>
                   </div>
-
                   <div className="pato-card">
                     <h3 className="font-display text-sm font-semibold mb-3">🎒 Itens</h3>
                     <div className="grid grid-cols-2 gap-2">
@@ -172,12 +176,17 @@ const DrawPage = () => {
                 </div>
               </div>
             )}
+
+            {selectedMode !== "Roleta" && selectedMode !== "Corrida de Patos" && (
+              <div className="pato-card flex items-center justify-center h-48 text-muted-foreground text-sm animate-fade-in">
+                Modo "{selectedMode}" em breve! 🦆
+              </div>
+            )}
           </>
         )}
 
         {activeTab === "inventario" && (
           <div className="space-y-5 animate-fade-in">
-            {/* Category tabs */}
             <div className="flex gap-2">
               {inventoryCategories.map((c) => (
                 <button
@@ -191,7 +200,6 @@ const DrawPage = () => {
                 </button>
               ))}
             </div>
-
             <div className="grid grid-cols-4 gap-3">
               {inventoryItems[selectedCat]?.map((item) => (
                 <div key={item.name} className="item-card group">
