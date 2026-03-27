@@ -133,38 +133,35 @@ const QuacksPage = () => {
           </span>
         </div>
 
-        {/* Content grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Quack cards */}
-          <div className="lg:col-span-2 space-y-4">
-            {filtered.length === 0 ? (
-              <div className="pato-card text-center py-12">
-                <p className="text-4xl mb-3">🦆</p>
-                <p className="font-display font-bold text-lg">Nenhum quack ainda!</p>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Crie seu primeiro quack e compartilhe o que está fazendo.
-                </p>
+        {/* Quack cards - full width */}
+        <div className="space-y-4">
+          {filtered.length === 0 ? (
+            <div className="pato-card text-center py-12">
+              <p className="text-4xl mb-3">🦆</p>
+              <p className="font-display font-bold text-lg">Nenhum quack ainda!</p>
+              <p className="text-sm text-muted-foreground mt-1">
+                Crie seu primeiro quack e compartilhe o que está fazendo.
+              </p>
+            </div>
+          ) : (
+            filtered.map((q, i) => (
+              <div key={q.id} className="animate-fade-in" style={{ animationDelay: `${i * 60}ms` }}>
+                <QuackCard
+                  quack={q}
+                  onEdit={setEditingQuack}
+                  onDelete={handleDelete}
+                  onUpdateProgress={handleUpdateProgress}
+                  onAddUpdate={handleAddUpdate}
+                  onPublish={handlePublish}
+                />
               </div>
-            ) : (
-              filtered.map((q, i) => (
-                <div key={q.id} className="animate-fade-in" style={{ animationDelay: `${i * 60}ms` }}>
-                  <QuackCard
-                    quack={q}
-                    onEdit={setEditingQuack}
-                    onDelete={handleDelete}
-                    onUpdateProgress={handleUpdateProgress}
-                    onAddUpdate={handleAddUpdate}
-                    onPublish={handlePublish}
-                  />
-                </div>
-              ))
-            )}
-          </div>
+            ))
+          )}
+        </div>
 
-          {/* Summary sidebar */}
-          <div className="space-y-4">
-            <QuackSummaryChart />
-          </div>
+        {/* Summary chart at the bottom */}
+        <div className="pt-4">
+          <QuackSummaryChart />
         </div>
       </div>
 
