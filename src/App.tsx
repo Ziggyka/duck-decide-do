@@ -16,6 +16,7 @@ import MemoriesPage from "./pages/MemoriesPage";
 import RankingPage from "./pages/RankingPage";
 import PatoVidentePage from "./pages/PatoVidentePage";
 import SettingsPage from "./pages/SettingsPage";
+import ChatPage from "./pages/ChatPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -40,6 +41,7 @@ const App = () => (
           <Route path="/ranking" element={<RankingPage />} />
           <Route path="/pato-vidente" element={<PatoVidentePage />} />
           <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/chat" element={<ChatPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

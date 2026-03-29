@@ -1,6 +1,6 @@
 import { 
   Newspaper, ListChecks, Shuffle, Users, Swords, Trophy, 
-  Camera, User, Settings, Flame, Sparkles, MessageCircle, ChevronLeft, ChevronRight
+  Camera, User, Settings, Flame, Sparkles, MessageCircle, ChevronLeft, ChevronRight, MessagesSquare
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSidebarCollapse } from "./AppLayout";
@@ -10,6 +10,7 @@ const navItems = [
   { icon: Newspaper, label: "Feed", path: "/" },
   { icon: Sparkles, label: "Pato Vidente", path: "/pato-vidente" },
   { icon: MessageCircle, label: "Meus Quacks", path: "/quacks" },
+  { icon: MessagesSquare, label: "Chat", path: "/chat" },
   { icon: ListChecks, label: "Minhas Listas", path: "/lists" },
   { icon: Shuffle, label: "Sorteio", path: "/draw" },
   { icon: Users, label: "Grupos", path: "/groups" },

@@ -1,8 +1,10 @@
-import { Heart, MessageCircle, ListPlus, Star, Award, Image as ImageIcon } from "lucide-react";
+import { useState } from "react";
+import { Heart, MessageCircle, ListPlus, Star, Award, Image as ImageIcon, Smile, AtSign, Send } from "lucide-react";
 import duckAvatar1 from "@/assets/duck-avatar-1.png";
 import duckAvatar2 from "@/assets/duck-avatar-2.png";
 import duckAvatar3 from "@/assets/duck-avatar-3.png";
 import AppLayout from "@/components/layout/AppLayout";
+import { toast } from "sonner";
 
 type PostType = "activity" | "review" | "achievement" | "list" | "photo";
 
@@ -21,7 +23,7 @@ interface FeedPost {
   liked?: boolean;
 }
 
-const posts: FeedPost[] = [
+const initialPosts: FeedPost[] = [
   {
     id: 1,
     user: "DuckSlayer",
@@ -106,14 +108,56 @@ const StarRating = ({ rating }: { rating: number }) => (
 );
 
 const FeedPage = () => {
+  const [postText, setPostText] = useState("");
+  const [posts] = useState(initialPosts);
+
+  const handleQuackar = () => {
+    if (!postText.trim()) return;
+    toast.success("Quack publicado! 🦆🎉");
+    setPostText("");
+  };
+
   return (
     <AppLayout>
       <div className="max-w-2xl mx-auto space-y-4">
-        {/* Create post */}
-        <div className="pato-card flex items-center gap-3">
-          <img src={duckAvatar1} alt="" className="w-10 h-10 rounded-full bg-duck-yellow-light border-2 border-primary" />
-          <div className="flex-1 px-4 py-2.5 rounded-xl bg-muted text-sm text-muted-foreground cursor-pointer hover:bg-muted/80 transition-colors">
-            O que você fez hoje, QuackMaster? 🦆
+        {/* Create post - Twitter-style */}
+        <div className="pato-card p-4">
+          <div className="flex gap-3">
+            <img src={duckAvatar1} alt="" className="w-11 h-11 rounded-full bg-duck-yellow-light border-2 border-primary flex-shrink-0" />
+            <div className="flex-1">
+              <textarea
+                value={postText}
+                onChange={(e) => setPostText(e.target.value)}
+                placeholder="O que você fez hoje? 🦆"
+                rows={3}
+                className="w-full resize-none bg-transparent text-sm placeholder:text-muted-foreground focus:outline-none leading-relaxed"
+              />
+              <div className="flex items-center justify-between pt-2 border-t border-border mt-2">
+                <div className="flex items-center gap-1">
+                  <button className="p-2 rounded-xl hover:bg-muted transition-colors" title="Imagem">
+                    <ImageIcon className="w-4 h-4 text-primary" />
+                  </button>
+                  <button className="p-2 rounded-xl hover:bg-muted transition-colors" title="Marcar amigo">
+                    <AtSign className="w-4 h-4 text-primary" />
+                  </button>
+                  <button className="p-2 rounded-xl hover:bg-muted transition-colors" title="Emoji">
+                    <Smile className="w-4 h-4 text-primary" />
+                  </button>
+                </div>
+                <button
+                  onClick={handleQuackar}
+                  disabled={!postText.trim()}
+                  className={`pato-btn-bounce flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-bold transition-all ${
+                    postText.trim()
+                      ? "bg-primary text-primary-foreground glow-pink"
+                      : "bg-muted text-muted-foreground cursor-not-allowed"
+                  }`}
+                >
+                  <Send className="w-4 h-4" />
+                  Quackar
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
