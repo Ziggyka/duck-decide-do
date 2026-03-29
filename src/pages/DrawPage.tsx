@@ -117,63 +117,12 @@ const DrawPage = () => {
             )}
 
             {selectedMode === "Corrida de Patos" && (
-              <div className="flex gap-4 animate-fade-in">
-                {/* Race Track */}
-                <div className="flex-1 pato-card p-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <h2 className="font-display text-lg font-bold">🏁 Corrida de Patos</h2>
-                    <button className="pato-btn-bounce bg-primary text-primary-foreground px-4 py-2 rounded-xl text-sm font-semibold">
-                      Iniciar Corrida!
-                    </button>
-                  </div>
-                  <div className="space-y-4">
-                    {racers.map((r, i) => (
-                      <div key={r.name} className="flex items-center gap-3">
-                        <span className="text-xs font-bold text-muted-foreground w-4">{i + 1}</span>
-                        <img src={r.avatar} alt="" className="w-10 h-10 rounded-full bg-muted border-2 border-border flex-shrink-0" />
-                        <div className="flex-1">
-                          <div className="flex justify-between text-xs mb-1">
-                            <span className="font-semibold">{r.name}</span>
-                            <span className="text-muted-foreground">{r.user}</span>
-                          </div>
-                          <div className="h-8 rounded-full bg-muted relative overflow-hidden">
-                            <div className="h-full rounded-full bg-gradient-to-r from-primary to-accent transition-all duration-1000 ease-out flex items-center justify-end pr-2" style={{ width: `${r.progress}%` }}>
-                              <span className="text-xs font-bold">🦆</span>
-                            </div>
-                            <div className="absolute right-0 top-0 bottom-0 w-1 bg-foreground/20" />
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Side Panel */}
-                <div className="w-64 space-y-4">
-                  <div className="pato-card">
-                    <h3 className="font-display text-sm font-semibold mb-3">Participantes</h3>
-                    <div className="space-y-2">
-                      {racers.map(r => (
-                        <div key={r.name} className="flex items-center gap-2 text-sm">
-                          <img src={r.avatar} alt="" className="w-6 h-6 rounded-full bg-muted" />
-                          <span className="truncate">{r.user}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="pato-card">
-                    <h3 className="font-display text-sm font-semibold mb-3">🎒 Itens</h3>
-                    <div className="grid grid-cols-2 gap-2">
-                      {raceItems.map((item) => (
-                        <button key={item.name} className="item-card p-3 pato-btn-bounce" title={item.name}>
-                          <span className="text-2xl">{item.icon}</span>
-                          <span className="text-[10px] font-medium text-muted-foreground">{item.name}</span>
-                          <span className="tag-pill bg-muted text-muted-foreground text-[10px]">x{item.qty}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+              <div className="pato-card p-8 animate-fade-in flex flex-col items-center justify-center text-center" style={{ minHeight: "300px" }}>
+                <span className="text-7xl mb-4">🦆</span>
+                <h2 className="font-display text-xl font-bold mb-2">Modo Corrida de Patos em breve!</h2>
+                <p className="text-sm text-muted-foreground max-w-md">
+                  Estamos preparando uma corrida épica de patos com sabotagens, itens e muita diversão. Fique ligado! 🏁
+                </p>
               </div>
             )}
 

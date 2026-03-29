@@ -1,171 +1,269 @@
 import { useState } from "react";
-import { Plus, Filter } from "lucide-react";
+import { Plus, Image as ImageIcon, AtSign, Smile, Send, MoreHorizontal, Heart, MessageCircle, Edit, Trash2 } from "lucide-react";
 import AppLayout from "@/components/layout/AppLayout";
-import CreateQuackModal, { type QuackData } from "@/components/quack/CreateQuackModal";
-import QuackCard from "@/components/quack/QuackCard";
 import QuackSummaryChart from "@/components/quack/QuackSummaryChart";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import duckAvatar1 from "@/assets/duck-avatar-1.png";
 
-const statusFilters = ["Todos", "Publicados", "Rascunhos"] as const;
+interface SimpleQuack {
+  id: string;
+  text: string;
+  image?: string;
+  likes: number;
+  comments: number;
+  createdAt: Date;
+  liked: boolean;
+}
 
 const QuacksPage = () => {
-  const [showCreate, setShowCreate] = useState(false);
-  const [quacks, setQuacks] = useState<QuackData[]>([
+  const [quacks, setQuacks] = useState<SimpleQuack[]>([
     {
-      id: "demo-1",
-      title: "Preparando PPT da noite de apresentações",
-      description: "Vamos fazer uma noite de PPT na casa do Lucas, cada um apresenta um tema aleatório 🎤",
-      category: "evento",
-      startDate: new Date(2026, 2, 20),
-      endDate: new Date(2026, 2, 20),
-      taggedFriends: [{ id: 2, name: "QuackQueen", username: "@quackqueen" }],
-      progress: 65,
-      status: "published",
-      updates: [
-        { text: "Escolhi o tema: 'Por que patos são superiores' 🦆", date: new Date(2026, 2, 16) },
-        { text: "Slides ficando lindos!", date: new Date(2026, 2, 17) },
-      ],
-      createdAt: new Date(2026, 2, 15),
+      id: "1",
+      text: "Preparando PPT da noite de apresentações 🎤 Cada um apresenta um tema aleatório!",
+      likes: 12,
+      comments: 4,
+      createdAt: new Date(2026, 2, 20),
+      liked: false,
     },
     {
-      id: "demo-2",
-      title: "Maratona de Attack on Titan",
-      description: "Última temporada, sem spoilers!",
-      category: "role",
-      startDate: new Date(2026, 2, 18),
-      taggedFriends: [
-        { id: 3, name: "PatoNinja", username: "@patoninja" },
-        { id: 4, name: "DuckMaster", username: "@duckmaster" },
-      ],
-      progress: 30,
-      status: "published",
-      updates: [],
-      createdAt: new Date(2026, 2, 14),
+      id: "2",
+      text: "Maratona de Attack on Titan com a galera! Última temporada, sem spoilers! 🗡️",
+      likes: 24,
+      comments: 8,
+      createdAt: new Date(2026, 2, 19),
+      liked: true,
     },
     {
-      id: "demo-3",
-      title: "Estudar React Native",
-      description: "Quero criar um app de patos",
-      category: "estudo",
-      taggedFriends: [],
-      progress: 0,
-      status: "draft",
-      updates: [],
-      createdAt: new Date(2026, 2, 17),
+      id: "3",
+      text: "Estudando React Native pra criar um app de patos 🦆📱",
+      likes: 6,
+      comments: 2,
+      createdAt: new Date(2026, 2, 18),
+      liked: false,
     },
   ]);
-  const [activeFilter, setActiveFilter] = useState<(typeof statusFilters)[number]>("Todos");
-  const [editingQuack, setEditingQuack] = useState<QuackData | null>(null);
 
-  const filtered = quacks.filter((q) => {
-    if (activeFilter === "Publicados") return q.status === "published";
-    if (activeFilter === "Rascunhos") return q.status === "draft";
-    return true;
-  });
+  const [postText, setPostText] = useState("");
+  const [editingQuack, setEditingQuack] = useState<SimpleQuack | null>(null);
+  const [editText, setEditText] = useState("");
+  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
-  const handleSave = (quack: QuackData) => {
-    setQuacks((prev) => [quack, ...prev]);
-    toast.success(quack.status === "draft" ? "Quack salvo como rascunho! 📝" : "Quack publicado! 🦆🎉");
+  const handleQuackar = () => {
+    if (!postText.trim()) return;
+    const newQuack: SimpleQuack = {
+      id: crypto.randomUUID(),
+      text: postText,
+      likes: 0,
+      comments: 0,
+      createdAt: new Date(),
+      liked: false,
+    };
+    setQuacks((prev) => [newQuack, ...prev]);
+    setPostText("");
+    toast.success("Quack publicado! 🦆🎉");
   };
 
   const handleDelete = (id: string) => {
     setQuacks((prev) => prev.filter((q) => q.id !== id));
+    setDeleteConfirm(null);
     toast.success("Quack excluído com sucesso 💨");
   };
 
-  const handleUpdateProgress = (id: string, progress: number) => {
-    setQuacks((prev) => prev.map((q) => (q.id === id ? { ...q, progress } : q)));
+  const handleSaveEdit = () => {
+    if (!editingQuack || !editText.trim()) return;
+    setQuacks((prev) => prev.map((q) => (q.id === editingQuack.id ? { ...q, text: editText } : q)));
+    setEditingQuack(null);
+    toast.success("Quack atualizado! ✨");
   };
 
-  const handleAddUpdate = (id: string, text: string) => {
+  const handleLike = (id: string) => {
     setQuacks((prev) =>
       prev.map((q) =>
-        q.id === id ? { ...q, updates: [...q.updates, { text, date: new Date() }] } : q
+        q.id === id ? { ...q, liked: !q.liked, likes: q.liked ? q.likes - 1 : q.likes + 1 } : q
       )
     );
-    toast.success("Atualização adicionada! ✨");
-  };
-
-  const handlePublish = (id: string) => {
-    setQuacks((prev) => prev.map((q) => (q.id === id ? { ...q, status: "published" as const } : q)));
-    toast.success("Quack publicado! 🦆🎉");
   };
 
   return (
     <AppLayout>
-      <div className="max-w-4xl mx-auto space-y-6">
+      <div className="max-w-2xl mx-auto space-y-4">
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-display font-bold">Meus Quacks</h1>
-            <p className="text-sm text-muted-foreground mt-0.5">
-              Compartilhe o que você está fazendo agora 🦆
-            </p>
-          </div>
-          <button
-            onClick={() => setShowCreate(true)}
-            className="pato-btn-bounce flex items-center gap-2 bg-primary text-primary-foreground px-5 py-2.5 rounded-2xl text-sm font-bold shadow-md glow-pink"
-          >
-            <Plus className="w-4 h-4" />
-            Criar Quack
-          </button>
-        </div>
+        <h1 className="text-2xl font-display font-bold">Meus Quacks 🦆</h1>
 
-        {/* Filters */}
-        <div className="flex gap-2">
-          {statusFilters.map((f) => (
-            <button
-              key={f}
-              onClick={() => setActiveFilter(f)}
-              className={cn(
-                "tag-pill py-1.5 px-4 text-sm transition-all",
-                activeFilter === f
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-card border border-border text-muted-foreground hover:text-foreground"
-              )}
-            >
-              {f}
-            </button>
-          ))}
-          <span className="tag-pill bg-muted text-muted-foreground py-1.5 px-3 text-sm ml-auto">
-            {filtered.length} quack{filtered.length !== 1 ? "s" : ""}
-          </span>
-        </div>
-
-        {/* Quack cards - full width */}
-        <div className="space-y-4">
-          {filtered.length === 0 ? (
-            <div className="pato-card text-center py-12">
-              <p className="text-4xl mb-3">🦆</p>
-              <p className="font-display font-bold text-lg">Nenhum quack ainda!</p>
-              <p className="text-sm text-muted-foreground mt-1">
-                Crie seu primeiro quack e compartilhe o que está fazendo.
-              </p>
-            </div>
-          ) : (
-            filtered.map((q, i) => (
-              <div key={q.id} className="animate-fade-in" style={{ animationDelay: `${i * 60}ms` }}>
-                <QuackCard
-                  quack={q}
-                  onEdit={setEditingQuack}
-                  onDelete={handleDelete}
-                  onUpdateProgress={handleUpdateProgress}
-                  onAddUpdate={handleAddUpdate}
-                  onPublish={handlePublish}
-                />
+        {/* Create Quack - Twitter style */}
+        <div className="pato-card p-4">
+          <div className="flex gap-3">
+            <img src={duckAvatar1} alt="" className="w-11 h-11 rounded-full bg-duck-yellow-light border-2 border-primary flex-shrink-0" />
+            <div className="flex-1">
+              <textarea
+                value={postText}
+                onChange={(e) => setPostText(e.target.value)}
+                placeholder="O que você fez hoje? 🦆"
+                rows={3}
+                className="w-full resize-none bg-transparent text-sm placeholder:text-muted-foreground focus:outline-none leading-relaxed"
+                autoFocus
+              />
+              <div className="flex items-center justify-between pt-2 border-t border-border mt-2">
+                <div className="flex items-center gap-1">
+                  <button className="p-2 rounded-xl hover:bg-muted transition-colors" title="Imagem">
+                    <ImageIcon className="w-4 h-4 text-primary" />
+                  </button>
+                  <button className="p-2 rounded-xl hover:bg-muted transition-colors" title="Marcar amigo">
+                    <AtSign className="w-4 h-4 text-primary" />
+                  </button>
+                  <button className="p-2 rounded-xl hover:bg-muted transition-colors" title="Emoji">
+                    <Smile className="w-4 h-4 text-primary" />
+                  </button>
+                </div>
+                <button
+                  onClick={handleQuackar}
+                  disabled={!postText.trim()}
+                  className={`pato-btn-bounce flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-bold transition-all ${
+                    postText.trim()
+                      ? "bg-primary text-primary-foreground glow-pink"
+                      : "bg-muted text-muted-foreground cursor-not-allowed"
+                  }`}
+                >
+                  <Send className="w-4 h-4" />
+                  Quackar
+                </button>
               </div>
-            ))
-          )}
+            </div>
+          </div>
+        </div>
+
+        {/* Quack list */}
+        <div className="space-y-3">
+          {quacks.map((q, i) => (
+            <div key={q.id} className="pato-card group animate-fade-in" style={{ animationDelay: `${i * 60}ms` }}>
+              <div className="flex gap-3">
+                <img src={duckAvatar1} alt="" className="w-10 h-10 rounded-full bg-duck-yellow-light border-2 border-primary flex-shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="font-display font-semibold text-sm">QuackMaster</span>
+                      <span className="text-xs text-muted-foreground">
+                        {q.createdAt.toLocaleDateString("pt-BR")}
+                      </span>
+                    </div>
+                    {/* Menu */}
+                    <div className="relative">
+                      <button
+                        onClick={() => setOpenMenuId(openMenuId === q.id ? null : q.id)}
+                        className="p-1.5 rounded-xl hover:bg-muted transition-colors opacity-0 group-hover:opacity-100"
+                      >
+                        <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
+                      </button>
+                      {openMenuId === q.id && (
+                        <div className="absolute right-0 top-8 bg-card border border-border rounded-xl shadow-lg z-20 py-1 min-w-[140px] animate-fade-in">
+                          <button
+                            onClick={() => {
+                              setEditingQuack(q);
+                              setEditText(q.text);
+                              setOpenMenuId(null);
+                            }}
+                            className="w-full flex items-center gap-2 px-4 py-2 text-sm hover:bg-muted transition-colors"
+                          >
+                            <Edit className="w-4 h-4" /> Editar
+                          </button>
+                          <button
+                            onClick={() => {
+                              setDeleteConfirm(q.id);
+                              setOpenMenuId(null);
+                            }}
+                            className="w-full flex items-center gap-2 px-4 py-2 text-sm hover:bg-muted transition-colors text-destructive"
+                          >
+                            <Trash2 className="w-4 h-4" /> Excluir
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <p className="text-sm mt-1 leading-relaxed">{q.text}</p>
+                  {/* Actions */}
+                  <div className="flex items-center gap-4 mt-3">
+                    <button
+                      onClick={() => handleLike(q.id)}
+                      className={`flex items-center gap-1.5 text-xs font-medium transition-colors ${
+                        q.liked ? "text-destructive" : "text-muted-foreground hover:text-destructive"
+                      }`}
+                    >
+                      <Heart className={`w-4 h-4 ${q.liked ? "fill-destructive" : ""}`} />
+                      {q.likes}
+                    </button>
+                    <button className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors">
+                      <MessageCircle className="w-4 h-4" />
+                      {q.comments}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* Summary chart at the bottom */}
-        <div className="pt-4">
+        <div className="pt-8">
           <QuackSummaryChart />
         </div>
       </div>
 
-      <CreateQuackModal open={showCreate} onClose={() => setShowCreate(false)} onSave={handleSave} />
+      {/* Edit Modal */}
+      <Dialog open={!!editingQuack} onOpenChange={(open) => !open && setEditingQuack(null)}>
+        <DialogContent className="bg-card border-border rounded-2xl">
+          <DialogHeader>
+            <DialogTitle>✏️ Editar Quack</DialogTitle>
+            <DialogDescription>Edite o conteúdo do seu quack</DialogDescription>
+          </DialogHeader>
+          <textarea
+            value={editText}
+            onChange={(e) => setEditText(e.target.value)}
+            rows={4}
+            className="w-full px-4 py-3 rounded-xl border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
+          />
+          <div className="flex gap-3 justify-end">
+            <button
+              onClick={() => setEditingQuack(null)}
+              className="px-4 py-2 rounded-xl border border-border text-sm hover:bg-muted transition-colors"
+            >
+              Cancelar
+            </button>
+            <button
+              onClick={handleSaveEdit}
+              className="px-5 py-2 rounded-xl bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors"
+            >
+              Salvar
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation Modal */}
+      <Dialog open={!!deleteConfirm} onOpenChange={(open) => !open && setDeleteConfirm(null)}>
+        <DialogContent className="bg-card border-border rounded-2xl max-w-sm">
+          <DialogHeader>
+            <DialogTitle>🦆💔 Excluir Quack?</DialogTitle>
+            <DialogDescription>Tem certeza que deseja excluir este quack? Essa ação não pode ser desfeita.</DialogDescription>
+          </DialogHeader>
+          <div className="flex gap-3 justify-end pt-2">
+            <button
+              onClick={() => setDeleteConfirm(null)}
+              className="px-4 py-2 rounded-xl border border-border text-sm hover:bg-muted transition-colors"
+            >
+              Cancelar
+            </button>
+            <button
+              onClick={() => deleteConfirm && handleDelete(deleteConfirm)}
+              className="px-5 py-2 rounded-xl bg-destructive text-destructive-foreground text-sm font-semibold hover:bg-destructive/90 transition-colors"
+            >
+              Excluir
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </AppLayout>
   );
 };
