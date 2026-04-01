@@ -2,11 +2,12 @@ import { useState } from "react";
 import {
   Sparkles, Clock, Users, User, Zap, Trophy, Gift, Star,
   Check, Flame, HelpCircle, Calendar, Target,
-  Bookmark, X, Loader2
+  Bookmark, X, Loader2, ChevronDown, ChevronUp
 } from "lucide-react";
 import AppLayout from "@/components/layout/AppLayout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import duckAvatar1 from "@/assets/duck-avatar-1.png";
 import duckAvatar2 from "@/assets/duck-avatar-2.png";
@@ -62,12 +63,12 @@ const rarityColors: Record<string, string> = {
   "Épico": "border-primary/40 bg-primary/10",
 };
 
-type ChallengeStatus = "done" | "in_progress" | "discarded" | null;
+type ChallengeStatus = "done" | "in_progress" | "not_started" | null;
 
 const statusConfig = {
-  done: { label: "Feito", className: "bg-success/15 text-success border-success/30", icon: Check },
+  done: { label: "Concluído", className: "bg-success/15 text-success border-success/30", icon: Check },
   in_progress: { label: "Em andamento", className: "bg-accent/15 text-accent-foreground border-accent/30", icon: Loader2 },
-  discarded: { label: "Descartado", className: "bg-destructive/15 text-destructive border-destructive/30", icon: X },
+  not_started: { label: "Não iniciado", className: "bg-muted text-muted-foreground border-border", icon: Clock },
 };
 
 const ChallengesPage = () => {
@@ -75,6 +76,7 @@ const ChallengesPage = () => {
   const [savedMain, setSavedMain] = useState(false);
   const [showReason, setShowReason] = useState(false);
   const [challengeStates, setChallengeStates] = useState<Record<number, ChallengeStatus>>({});
+  const [expandedChallenge, setExpandedChallenge] = useState<number | null>(null);
   const [earnedXp, setEarnedXp] = useState(0);
 
   const setStatus = (id: number, status: ChallengeStatus, xp: number) => {
@@ -82,25 +84,21 @@ const ChallengesPage = () => {
     if (status === "done") {
       setEarnedXp(prev => prev + xp);
       toast.success(`+${xp} XP ganhos! 🎉`);
-    } else if (status === "discarded") {
-      toast("Desafio descartado");
     } else if (status === "in_progress") {
-      toast.success("Desafio aceito! Aparecerá no seu perfil 🦆");
+      toast.success("Desafio em andamento! 🦆");
     }
   };
 
-  const visibleChallenges = weeklyChallenges.filter(c => challengeStates[c.id] !== "discarded");
   const doneCount = Object.values(challengeStates).filter(s => s === "done").length;
 
   return (
     <AppLayout hideRightSidebar>
       <div className="max-w-5xl mx-auto space-y-8 pb-12">
-
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl flex items-center gap-2">Desafios 🦆</h1>
-            <p className="text-muted-foreground mt-1">Desafios personalizados para você sair da rotina</p>
+            <h1 className="text-3xl flex items-center gap-2">Meus Desafios 🦆</h1>
+            <p className="text-muted-foreground mt-1">Desafios semanais personalizados para você</p>
           </div>
           <div className="flex items-center gap-3">
             <div className="pato-card p-3 flex items-center gap-2">
@@ -188,24 +186,36 @@ const ChallengesPage = () => {
           </div>
         </section>
 
-        {/* Weekly Challenges */}
+        {/* Weekly Challenges - Click to reveal status */}
         <section>
           <h2 className="text-lg font-display font-bold mb-4 flex items-center gap-2">
             <Calendar className="w-5 h-5 text-primary" /> Desafios da Semana
           </h2>
           <div className="grid grid-cols-3 gap-4">
-            {visibleChallenges.map((c) => {
+            {weeklyChallenges.map((c) => {
               const state = challengeStates[c.id];
               const config = state ? statusConfig[state] : null;
+              const isExpanded = expandedChallenge === c.id;
+
               return (
-                <div key={c.id} className={`pato-card p-5 flex flex-col gap-3 transition-all duration-300 animate-fade-in ${state === "done" ? "border-success/40" : state === "in_progress" ? "border-accent/40" : ""}`}>
+                <div
+                  key={c.id}
+                  className={cn(
+                    "pato-card p-5 flex flex-col gap-3 transition-all duration-300 animate-fade-in cursor-pointer",
+                    state === "done" ? "border-success/40" : state === "in_progress" ? "border-accent/40" : ""
+                  )}
+                  onClick={() => setExpandedChallenge(isExpanded ? null : c.id)}
+                >
                   <div className="flex items-start justify-between">
                     <span className="text-3xl">{c.icon}</span>
-                    {config && (
-                      <Badge className={`${config.className} border text-[10px] gap-1`}>
-                        <config.icon className="w-3 h-3" /> {config.label}
-                      </Badge>
-                    )}
+                    <div className="flex items-center gap-1.5">
+                      {config && (
+                        <Badge className={`${config.className} border text-[10px] gap-1`}>
+                          <config.icon className="w-3 h-3" /> {config.label}
+                        </Badge>
+                      )}
+                      {isExpanded ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
+                    </div>
                   </div>
                   <h3 className="font-display font-semibold text-sm leading-tight">{c.title}</h3>
                   <p className="text-xs text-muted-foreground flex-1">{c.desc}</p>
@@ -216,17 +226,38 @@ const ChallengesPage = () => {
                     <span className="tag-pill bg-primary/15 text-primary text-[10px] font-semibold">+{c.xp} XP</span>
                     <span className="tag-pill bg-accent/15 text-accent-foreground text-[10px]">🎁 {c.item}</span>
                   </div>
-                  {!state && (
-                    <div className="flex gap-1.5 mt-1">
-                      <button onClick={() => setStatus(c.id, "done", c.xp)} className="flex-1 py-1.5 rounded-lg text-[11px] font-semibold bg-success/15 text-success hover:bg-success/25 transition-colors">✓ Feito</button>
-                      <button onClick={() => setStatus(c.id, "in_progress", 0)} className="flex-1 py-1.5 rounded-lg text-[11px] font-semibold bg-accent/15 text-accent-foreground hover:bg-accent/25 transition-colors">⏳ Andamento</button>
-                      <button onClick={() => setStatus(c.id, "discarded", 0)} className="flex-1 py-1.5 rounded-lg text-[11px] font-semibold bg-destructive/15 text-destructive hover:bg-destructive/25 transition-colors">✕ Descartar</button>
+
+                  {/* Status actions - only show when expanded */}
+                  {isExpanded && (
+                    <div className="pt-2 border-t border-border space-y-2 animate-fade-in" onClick={(e) => e.stopPropagation()}>
+                      <p className="text-[11px] font-semibold text-muted-foreground">Atualizar status:</p>
+                      <div className="flex gap-1.5">
+                        <button
+                          onClick={() => setStatus(c.id, "not_started", 0)}
+                          className={cn("flex-1 py-1.5 rounded-lg text-[11px] font-semibold transition-colors",
+                            state === "not_started" ? "bg-muted text-foreground ring-2 ring-border" : "bg-muted/50 text-muted-foreground hover:bg-muted"
+                          )}
+                        >
+                          ⏸ Não iniciado
+                        </button>
+                        <button
+                          onClick={() => setStatus(c.id, "in_progress", 0)}
+                          className={cn("flex-1 py-1.5 rounded-lg text-[11px] font-semibold transition-colors",
+                            state === "in_progress" ? "bg-accent/25 text-accent-foreground ring-2 ring-accent/40" : "bg-accent/10 text-accent-foreground hover:bg-accent/20"
+                          )}
+                        >
+                          ⏳ Andamento
+                        </button>
+                        <button
+                          onClick={() => setStatus(c.id, "done", c.xp)}
+                          className={cn("flex-1 py-1.5 rounded-lg text-[11px] font-semibold transition-colors",
+                            state === "done" ? "bg-success/25 text-success ring-2 ring-success/40" : "bg-success/10 text-success hover:bg-success/20"
+                          )}
+                        >
+                          ✓ Concluído
+                        </button>
+                      </div>
                     </div>
-                  )}
-                  {state && (
-                    <button onClick={() => setChallengeStates(prev => ({ ...prev, [c.id]: null }))} className="text-[10px] text-muted-foreground hover:text-foreground transition-colors text-center">
-                      Alterar status
-                    </button>
                   )}
                 </div>
               );
