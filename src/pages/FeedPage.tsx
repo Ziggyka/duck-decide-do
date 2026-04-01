@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { Heart, MessageCircle, ListPlus, Star, Award, Image as ImageIcon, Smile, AtSign, Send } from "lucide-react";
+import { Heart, MessageCircle, ListPlus, Star, Award, Image as ImageIcon, Smile, AtSign, Send, Users, ListChecks } from "lucide-react";
 import duckAvatar1 from "@/assets/duck-avatar-1.png";
 import duckAvatar2 from "@/assets/duck-avatar-2.png";
 import duckAvatar3 from "@/assets/duck-avatar-3.png";
 import AppLayout from "@/components/layout/AppLayout";
+import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
-type PostType = "activity" | "review" | "achievement" | "list" | "photo";
+type PostType = "simple" | "quack_update" | "achievement";
 
 interface FeedPost {
   id: number;
@@ -14,113 +15,96 @@ interface FeedPost {
   avatar: string;
   type: PostType;
   content: string;
-  activity?: string;
-  rating?: number;
+  // Quack-specific fields
+  quackTitle?: string;
+  quackCategory?: string;
+  quackStatus?: string;
+  quackRating?: number;
+  quackTags?: string[];
+  quackChecklist?: { done: number; total: number };
+  // General
   likes: number;
   comments: number;
   time: string;
-  tags?: string[];
   liked?: boolean;
 }
 
+const statusMeta: Record<string, { label: string; emoji: string; color: string }> = {
+  "quero_fazer": { label: "Quero fazer", emoji: "📌", color: "bg-primary/15 text-primary" },
+  "fazendo": { label: "Fazendo", emoji: "⏳", color: "bg-accent/15 text-accent-foreground" },
+  "feito": { label: "Feito", emoji: "✅", color: "bg-success/15 text-success" },
+};
+
 const initialPosts: FeedPost[] = [
   {
-    id: 1,
-    user: "DuckSlayer",
-    avatar: duckAvatar2,
-    type: "activity",
+    id: 1, user: "DuckSlayer", avatar: duckAvatar2, type: "simple",
     content: "Acabei de assistir Interstellar com a galera! 🚀 Filme incrível, recomendo demais!",
-    activity: "Interstellar",
-    rating: 5,
-    likes: 24,
-    comments: 8,
-    time: "2h atrás",
-    tags: ["Filmes", "Ficção Científica"],
-    liked: true,
+    likes: 24, comments: 8, time: "2h atrás", liked: true,
   },
   {
-    id: 2,
-    user: "QuackQueen",
-    avatar: duckAvatar3,
-    type: "achievement",
+    id: 2, user: "QuackQueen", avatar: duckAvatar3, type: "quack_update",
+    content: "Atualizou o status da atividade",
+    quackTitle: "Frieren", quackCategory: "Anime", quackStatus: "fazendo",
+    quackTags: ["fantasia", "shounen"], quackChecklist: { done: 5, total: 10 },
+    likes: 18, comments: 4, time: "3h atrás",
+  },
+  {
+    id: 3, user: "QuackQueen", avatar: duckAvatar3, type: "achievement",
     content: "Desbloqueou a conquista Explorador — visitou 10 restaurantes diferentes! 🏆",
-    likes: 42,
-    comments: 12,
-    time: "4h atrás",
-    tags: ["Conquista"],
+    likes: 42, comments: 12, time: "4h atrás",
   },
   {
-    id: 3,
-    user: "PatoNinja",
-    avatar: duckAvatar2,
-    type: "review",
-    content: "Review do novo board game Catan! Jogamos no sábado e foi muito divertido.",
-    activity: "Catan",
-    rating: 4,
-    likes: 15,
-    comments: 5,
-    time: "6h atrás",
-    tags: ["Jogos", "Board Games"],
+    id: 4, user: "PatoNinja", avatar: duckAvatar2, type: "quack_update",
+    content: "Concluiu a atividade e avaliou!",
+    quackTitle: "Treino de Corrida C25K", quackCategory: "Fitness", quackStatus: "feito",
+    quackRating: 5, quackTags: ["saude", "cardio"],
+    likes: 33, comments: 7, time: "5h atrás",
   },
   {
-    id: 4,
-    user: "DuckMaster",
-    avatar: duckAvatar3,
-    type: "list",
+    id: 5, user: "DuckMaster", avatar: duckAvatar3, type: "simple",
     content: "Adicionou 5 novos animes à lista 'Maratona de Verão' 📋",
-    likes: 8,
-    comments: 3,
-    time: "8h atrás",
-    tags: ["Animes", "Lista"],
+    likes: 8, comments: 3, time: "8h atrás",
   },
   {
-    id: 5,
-    user: "QuackMaster",
-    avatar: duckAvatar1,
-    type: "photo",
+    id: 6, user: "QuackMaster", avatar: duckAvatar1, type: "simple",
     content: "Noite de pizza com a turma! 🍕🎉 Melhor rolê da semana!",
-    activity: "Pizzaria do Zé",
-    rating: 5,
-    likes: 56,
-    comments: 18,
-    time: "1d atrás",
-    tags: ["Restaurantes", "Amigos"],
+    likes: 56, comments: 18, time: "1d atrás", liked: false,
   },
 ];
-
-const typeColors: Record<PostType, { bg: string; text: string; label: string }> = {
-  activity: { bg: "bg-accent/15", text: "text-accent", label: "Quack" },
-  review: { bg: "bg-primary/15", text: "text-primary-foreground", label: "Avaliação" },
-  achievement: { bg: "bg-success/15", text: "text-success", label: "Conquista" },
-  list: { bg: "bg-muted", text: "text-muted-foreground", label: "Lista" },
-  photo: { bg: "bg-streak/15", text: "text-streak", label: "Foto" },
-};
 
 const StarRating = ({ rating }: { rating: number }) => (
   <div className="flex gap-0.5">
     {[1, 2, 3, 4, 5].map((s) => (
-      <Star
-        key={s}
-        className={`w-4 h-4 ${s <= rating ? "fill-primary text-primary" : "text-muted"}`}
-      />
+      <Star key={s} className={cn("w-4 h-4", s <= rating ? "fill-accent text-accent" : "text-muted")} />
     ))}
   </div>
 );
 
 const FeedPage = () => {
   const [postText, setPostText] = useState("");
-  const [posts] = useState(initialPosts);
+  const [posts, setPosts] = useState(initialPosts);
 
   const handleQuackar = () => {
     if (!postText.trim()) return;
-    toast.success("Quack publicado! 🦆🎉");
+    const newPost: FeedPost = {
+      id: Date.now(), user: "QuackMaster", avatar: duckAvatar1, type: "simple",
+      content: postText, likes: 0, comments: 0, time: "Agora", liked: false,
+    };
+    setPosts([newPost, ...posts]);
     setPostText("");
+    toast.success("Quack publicado! 🦆🎉");
+  };
+
+  const handleLike = (id: number) => {
+    setPosts(posts.map(p =>
+      p.id === id ? { ...p, liked: !p.liked, likes: p.liked ? p.likes - 1 : p.likes + 1 } : p
+    ));
   };
 
   return (
     <AppLayout>
       <div className="max-w-2xl mx-auto space-y-4">
-        {/* Create post - Twitter-style */}
+        {/* Create post */}
         <div className="pato-card p-4">
           <div className="flex gap-3">
             <img src={duckAvatar1} alt="" className="w-11 h-11 rounded-full bg-duck-yellow-light border-2 border-primary flex-shrink-0" />
@@ -134,27 +118,18 @@ const FeedPage = () => {
               />
               <div className="flex items-center justify-between pt-2 border-t border-border mt-2">
                 <div className="flex items-center gap-1">
-                  <button className="p-2 rounded-xl hover:bg-muted transition-colors" title="Imagem">
-                    <ImageIcon className="w-4 h-4 text-primary" />
-                  </button>
-                  <button className="p-2 rounded-xl hover:bg-muted transition-colors" title="Marcar amigo">
-                    <AtSign className="w-4 h-4 text-primary" />
-                  </button>
-                  <button className="p-2 rounded-xl hover:bg-muted transition-colors" title="Emoji">
-                    <Smile className="w-4 h-4 text-primary" />
-                  </button>
+                  <button className="p-2 rounded-xl hover:bg-muted transition-colors"><ImageIcon className="w-4 h-4 text-primary" /></button>
+                  <button className="p-2 rounded-xl hover:bg-muted transition-colors"><AtSign className="w-4 h-4 text-primary" /></button>
+                  <button className="p-2 rounded-xl hover:bg-muted transition-colors"><Smile className="w-4 h-4 text-primary" /></button>
                 </div>
                 <button
                   onClick={handleQuackar}
                   disabled={!postText.trim()}
-                  className={`pato-btn-bounce flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-bold transition-all ${
-                    postText.trim()
-                      ? "bg-primary text-primary-foreground glow-pink"
-                      : "bg-muted text-muted-foreground cursor-not-allowed"
-                  }`}
+                  className={cn("pato-btn-bounce flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-bold transition-all",
+                    postText.trim() ? "bg-primary text-primary-foreground glow-pink" : "bg-muted text-muted-foreground cursor-not-allowed"
+                  )}
                 >
-                  <Send className="w-4 h-4" />
-                  Quackar
+                  <Send className="w-4 h-4" /> Quackar
                 </button>
               </div>
             </div>
@@ -162,90 +137,95 @@ const FeedPage = () => {
         </div>
 
         {/* Posts */}
-        {posts.map((post, i) => {
-          const typeStyle = typeColors[post.type];
-          return (
-            <div
-              key={post.id}
-              className="pato-card animate-fade-in"
-              style={{ animationDelay: `${i * 80}ms` }}
-            >
-              {/* Header */}
-              <div className="flex items-start gap-3 mb-3">
-                <img src={post.avatar} alt={post.user} className="w-10 h-10 rounded-full bg-duck-yellow-light border-2 border-border" />
-                <div className="flex-1">
-                  <div className="flex items-center gap-2">
-                    <span className="font-display font-semibold text-sm">{post.user}</span>
-                    <span className={`tag-pill ${typeStyle.bg} ${typeStyle.text}`}>
-                      {typeStyle.label}
-                    </span>
-                  </div>
-                  <p className="text-xs text-muted-foreground">{post.time}</p>
+        {posts.map((post, i) => (
+          <div
+            key={post.id}
+            className={cn(
+              "pato-card animate-fade-in",
+              post.type === "quack_update" && "border-l-4 border-l-primary/40"
+            )}
+            style={{ animationDelay: `${i * 80}ms` }}
+          >
+            {/* Header */}
+            <div className="flex items-start gap-3 mb-3">
+              <img src={post.avatar} alt={post.user} className="w-10 h-10 rounded-full bg-duck-yellow-light border-2 border-border" />
+              <div className="flex-1">
+                <div className="flex items-center gap-2">
+                  <span className="font-display font-semibold text-sm">{post.user}</span>
+                  {post.type === "simple" && <span className="tag-pill bg-muted text-muted-foreground text-[10px]">Post</span>}
+                  {post.type === "quack_update" && <span className="tag-pill bg-primary/15 text-primary text-[10px]">Quack</span>}
+                  {post.type === "achievement" && <span className="tag-pill bg-success/15 text-success text-[10px]">Conquista</span>}
                 </div>
-              </div>
-
-              {/* Content */}
-              <p className="text-sm mb-3 leading-relaxed">{post.content}</p>
-
-              {/* Activity + Rating */}
-              {post.activity && (
-                <div className="flex items-center gap-3 mb-3 p-3 rounded-xl bg-muted/50">
-                  <div className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center">
-                    {post.type === "photo" ? (
-                      <ImageIcon className="w-5 h-5 text-primary" />
-                    ) : (
-                      <Star className="w-5 h-5 text-primary" />
-                    )}
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold">{post.activity}</p>
-                    {post.rating && <StarRating rating={post.rating} />}
-                  </div>
-                </div>
-              )}
-
-              {/* Achievement badge */}
-              {post.type === "achievement" && (
-                <div className="flex items-center gap-3 mb-3 p-3 rounded-xl bg-success/10 border border-success/20">
-                  <div className="w-10 h-10 rounded-full bg-success/20 flex items-center justify-center">
-                    <Award className="w-5 h-5 text-success" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold text-success">Conquista Desbloqueada!</p>
-                    <p className="text-xs text-muted-foreground">+200 XP</p>
-                  </div>
-                </div>
-              )}
-
-              {/* Tags */}
-              {post.tags && (
-                <div className="flex flex-wrap gap-1.5 mb-3">
-                  {post.tags.map((tag) => (
-                    <span key={tag} className="tag-pill bg-muted text-muted-foreground">
-                      #{tag}
-                    </span>
-                  ))}
-                </div>
-              )}
-
-              {/* Actions */}
-              <div className="flex items-center gap-1 pt-2 border-t border-border">
-                <button className={`pato-btn-bounce flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${post.liked ? "text-destructive" : "text-muted-foreground hover:text-foreground hover:bg-muted"}`}>
-                  <Heart className={`w-4 h-4 ${post.liked ? "fill-destructive" : ""}`} />
-                  {post.likes}
-                </button>
-                <button className="pato-btn-bounce flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">
-                  <MessageCircle className="w-4 h-4" />
-                  {post.comments}
-                </button>
-                <button className="pato-btn-bounce flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors ml-auto">
-                  <ListPlus className="w-4 h-4" />
-                  Minha Lista
-                </button>
+                <p className="text-xs text-muted-foreground">{post.time}</p>
               </div>
             </div>
-          );
-        })}
+
+            {/* Content */}
+            <p className="text-sm mb-3 leading-relaxed">{post.content}</p>
+
+            {/* Quack card embed */}
+            {post.type === "quack_update" && post.quackTitle && (
+              <div className="p-4 rounded-xl bg-muted/50 border border-border mb-3 space-y-2">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h4 className="font-display font-bold text-sm">{post.quackTitle}</h4>
+                  {post.quackCategory && <span className="tag-pill bg-muted text-muted-foreground text-[10px]">{post.quackCategory}</span>}
+                  {post.quackStatus && (
+                    <span className={cn("tag-pill text-[10px] font-semibold", statusMeta[post.quackStatus]?.color)}>
+                      {statusMeta[post.quackStatus]?.emoji} {statusMeta[post.quackStatus]?.label}
+                    </span>
+                  )}
+                </div>
+                {post.quackTags && post.quackTags.length > 0 && (
+                  <div className="flex gap-1.5">
+                    {post.quackTags.map(tag => <span key={tag} className="tag-pill bg-primary/10 text-primary text-[10px]">#{tag}</span>)}
+                  </div>
+                )}
+                {post.quackChecklist && (
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <ListChecks className="w-3.5 h-3.5" />
+                    <span>{post.quackChecklist.done}/{post.quackChecklist.total} tarefas</span>
+                    <div className="flex-1 h-1.5 rounded-full bg-muted overflow-hidden max-w-[120px]">
+                      <div className="h-full rounded-full bg-success" style={{ width: `${(post.quackChecklist.done / post.quackChecklist.total) * 100}%` }} />
+                    </div>
+                  </div>
+                )}
+                {post.quackRating && post.quackRating > 0 && <StarRating rating={post.quackRating} />}
+              </div>
+            )}
+
+            {/* Achievement badge */}
+            {post.type === "achievement" && (
+              <div className="flex items-center gap-3 mb-3 p-3 rounded-xl bg-success/10 border border-success/20">
+                <div className="w-10 h-10 rounded-full bg-success/20 flex items-center justify-center">
+                  <Award className="w-5 h-5 text-success" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-success">Conquista Desbloqueada!</p>
+                  <p className="text-xs text-muted-foreground">+200 XP</p>
+                </div>
+              </div>
+            )}
+
+            {/* Actions */}
+            <div className="flex items-center gap-1 pt-2 border-t border-border">
+              <button
+                onClick={() => handleLike(post.id)}
+                className={cn("pato-btn-bounce flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors",
+                  post.liked ? "text-destructive" : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                )}
+              >
+                <Heart className={cn("w-4 h-4", post.liked && "fill-destructive")} />
+                {post.likes}
+              </button>
+              <button className="pato-btn-bounce flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">
+                <MessageCircle className="w-4 h-4" /> {post.comments}
+              </button>
+              <button className="pato-btn-bounce flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors ml-auto">
+                <ListPlus className="w-4 h-4" /> Minha Lista
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
     </AppLayout>
   );

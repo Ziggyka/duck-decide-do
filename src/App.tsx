@@ -17,6 +17,7 @@ import RankingPage from "./pages/RankingPage";
 import PatoVidentePage from "./pages/PatoVidentePage";
 import SettingsPage from "./pages/SettingsPage";
 import ChatPage from "./pages/ChatPage";
+import AchievementsPage from "./pages/AchievementsPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -37,6 +38,7 @@ const App = () => (
           <Route path="/draw" element={<DrawPage />} />
           <Route path="/groups" element={<GroupsPage />} />
           <Route path="/challenges" element={<ChallengesPage />} />
+          <Route path="/achievements" element={<AchievementsPage />} />
           <Route path="/memories" element={<MemoriesPage />} />
           <Route path="/ranking" element={<RankingPage />} />
           <Route path="/pato-vidente" element={<PatoVidentePage />} />
