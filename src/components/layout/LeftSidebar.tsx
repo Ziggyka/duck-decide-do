@@ -1,5 +1,5 @@
 import { 
-  Newspaper, ListChecks, Shuffle, Users, Swords, Trophy, 
+  Newspaper, ListChecks, Shuffle, Users, Swords, Trophy, Award,
   Camera, User, Settings, Flame, Sparkles, MessageCircle, ChevronLeft, ChevronRight, MessagesSquare
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -14,7 +14,8 @@ const navItems = [
   { icon: ListChecks, label: "Minhas Listas", path: "/lists" },
   { icon: Shuffle, label: "Sorteio", path: "/draw" },
   { icon: Users, label: "Grupos", path: "/groups" },
-  { icon: Swords, label: "Desafios", path: "/challenges" },
+  { icon: Swords, label: "Meus Desafios", path: "/challenges" },
+  { icon: Award, label: "Conquistas", path: "/achievements" },
   { icon: Trophy, label: "Ranking", path: "/ranking" },
   { icon: Camera, label: "Memórias", path: "/memories" },
   { icon: User, label: "Perfil", path: "/profile" },
