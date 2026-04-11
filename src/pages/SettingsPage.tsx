@@ -17,7 +17,6 @@ const sections = [
   { id: "security", label: "Segurança", icon: Shield },
   { id: "privacy", label: "Privacidade", icon: Lock },
   { id: "notifications", label: "Notificações", icon: Bell },
-  { id: "accessibility", label: "Acessibilidade", icon: Palette },
   { id: "data", label: "Dados e Atividade", icon: Database },
   { id: "danger", label: "Conta", icon: AlertTriangle },
 ];
