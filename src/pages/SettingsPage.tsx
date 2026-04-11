@@ -215,54 +215,6 @@ const SettingsPage = () => {
               </div>
             )}
 
-            {activeSection === "accessibility" && (
-              <div className="pato-card p-6 space-y-5 animate-fade-in">
-                <h2 className="text-lg font-display">Acessibilidade</h2>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-semibold">Tema</p>
-                      <p className="text-xs text-muted-foreground">Escolha entre claro, escuro ou automático</p>
-                    </div>
-                    <div className="flex gap-2">
-                      {[
-                        { icon: Sun, label: "Claro" },
-                        { icon: Moon, label: "Escuro" },
-                        { icon: Monitor, label: "Auto" },
-                      ].map((t) => (
-                        <button key={t.label} className="p-2 rounded-xl border border-border hover:bg-muted transition-colors" title={t.label}>
-                          <t.icon className="w-4 h-4" />
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  {[
-                    { label: "Alto contraste", desc: "Aumenta o contraste visual" },
-                    { label: "Reduzir animações", desc: "Diminui movimentos na interface" },
-                    { label: "Navegação acessível", desc: "Otimiza para leitores de tela" },
-                  ].map((item) => (
-                    <div key={item.label} className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm font-semibold">{item.label}</p>
-                        <p className="text-xs text-muted-foreground">{item.desc}</p>
-                      </div>
-                      <Switch />
-                    </div>
-                  ))}
-                  <div className="space-y-2">
-                    <Label>Tamanho da fonte</Label>
-                    <Select defaultValue="medium">
-                      <SelectTrigger className="rounded-xl"><SelectValue /></SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="small">Pequena</SelectItem>
-                        <SelectItem value="medium">Média</SelectItem>
-                        <SelectItem value="large">Grande</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-              </div>
-            )}
 
             {activeSection === "data" && (
               <div className="pato-card p-6 space-y-5 animate-fade-in">
