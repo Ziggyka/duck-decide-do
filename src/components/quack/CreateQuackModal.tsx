@@ -354,7 +354,7 @@ const CreateQuackModal = ({ open, onClose, onSave, editingQuack }: CreateQuackMo
           {/* Responsible People */}
           <div>
             <label className="text-sm font-medium text-muted-foreground mb-2 flex items-center gap-1.5">
-              <UserCheck className="w-4 h-4" /> Responsáveis pela atividade
+              <UserCheck className="w-4 h-4" /> Participantes 
             </label>
             {responsiblePeople.length > 0 && (
               <div className="flex flex-wrap gap-1.5 mb-2">
