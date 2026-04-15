@@ -25,32 +25,32 @@ const LeftSidebar = () => {
   const { collapsed, setCollapsed } = useSidebarCollapse();
 
   return (
-    <aside className={`bg-secondary text-secondary-foreground border-r border-sidebar-border flex-shrink-0 h-[calc(100vh-4rem)] sticky top-16 overflow-y-auto py-4 px-3 flex flex-col gap-1 transition-all duration-300 ${collapsed ? "w-[72px]" : "w-60"}`}>
+    <aside className={`bg-sidebar text-sidebar-foreground border-r border-sidebar-border flex-shrink-0 h-[calc(100vh-4rem)] sticky top-16 overflow-y-auto py-4 px-3 flex flex-col gap-1 transition-all duration-300 ${collapsed ? "w-[72px]" : "w-60"}`}>
       {/* Collapse toggle */}
       <button
         onClick={() => setCollapsed(!collapsed)}
-        className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-secondary-foreground/10 transition-colors mb-2 self-end"
+        className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-white/15 transition-colors mb-2 self-end"
         title={collapsed ? "Expandir" : "Recolher"}
       >
-        {collapsed ? <ChevronRight className="w-4 h-4 text-secondary-foreground/60" /> : <ChevronLeft className="w-4 h-4 text-secondary-foreground/60" />}
+        {collapsed ? <ChevronRight className="w-4 h-4 text-white/70" /> : <ChevronLeft className="w-4 h-4 text-white/70" />}
       </button>
 
       {/* Streak Banner */}
       {!collapsed && (
-        <div className="mb-3 flex items-center gap-3 rounded-2xl bg-primary/10 border border-primary/20 p-4 animate-fade-in">
-          <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
-            <Flame className="w-5 h-5 text-primary" />
+        <div className="mb-3 flex items-center gap-3 rounded-2xl bg-white/15 border border-white/20 p-4 animate-fade-in">
+          <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+            <Flame className="w-5 h-5 text-white" />
           </div>
           <div>
-            <p className="text-xs text-secondary-foreground/50">Streak</p>
-            <p className="font-display font-bold text-lg leading-none text-secondary-foreground">12 dias 🔥</p>
+            <p className="text-xs text-white/60">Streak</p>
+            <p className="font-display font-bold text-lg leading-none text-white">12 dias 🔥</p>
           </div>
         </div>
       )}
       {collapsed && (
         <div className="mb-3 flex items-center justify-center">
-          <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
-            <Flame className="w-5 h-5 text-primary" />
+          <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+            <Flame className="w-5 h-5 text-white" />
           </div>
         </div>
       )}
@@ -92,18 +92,18 @@ const LeftSidebar = () => {
         {!collapsed ? (
           <>
             <div className="flex items-center justify-between text-xs mb-1">
-              <span className="font-display font-semibold text-secondary-foreground">Nível 24</span>
-              <span className="text-secondary-foreground/50">2.450 / 3.000 XP</span>
+              <span className="font-display font-semibold text-white">Nível 24</span>
+              <span className="text-white/50">2.450 / 3.000 XP</span>
             </div>
-            <div className="h-3 rounded-full bg-secondary-foreground/10 overflow-hidden">
-              <div className="h-full rounded-full bg-gradient-to-r from-primary to-accent transition-all duration-700 ease-out" style={{ width: "82%" }} />
+            <div className="h-3 rounded-full bg-white/15 overflow-hidden">
+              <div className="h-full rounded-full bg-white transition-all duration-700 ease-out" style={{ width: "82%" }} />
             </div>
           </>
         ) : (
           <div className="flex flex-col items-center gap-1">
-            <span className="text-[10px] font-bold text-secondary-foreground/50">Lv 24</span>
-            <div className="w-8 h-2 rounded-full bg-secondary-foreground/10 overflow-hidden">
-              <div className="h-full rounded-full bg-gradient-to-r from-primary to-accent" style={{ width: "82%" }} />
+            <span className="text-[10px] font-bold text-white/60">Lv 24</span>
+            <div className="w-8 h-2 rounded-full bg-white/15 overflow-hidden">
+              <div className="h-full rounded-full bg-white" style={{ width: "82%" }} />
             </div>
           </div>
         )}
