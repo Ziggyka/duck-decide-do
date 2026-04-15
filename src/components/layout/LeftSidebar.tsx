@@ -25,7 +25,7 @@ const LeftSidebar = () => {
   const { collapsed, setCollapsed } = useSidebarCollapse();
 
   return (
-    <aside className={`bg-secondary text-secondary-foreground border-r border-sidebar-border flex-shrink-0 h-[calc(100vh-4rem)] sticky top-16 overflow-y-auto py-4 px-3 flex flex-col gap-1 transition-all duration-300 ${collapsed ? "w-[72px]" : "w-60"}`}>
+    <aside className={`bg-sidebar text-sidebar-foreground border-r border-sidebar-border flex-shrink-0 h-[calc(100vh-4rem)] sticky top-16 overflow-y-auto py-4 px-3 flex flex-col gap-1 transition-all duration-300 ${collapsed ? "w-[72px]" : "w-60"}`}>
       {/* Collapse toggle */}
       <button
         onClick={() => setCollapsed(!collapsed)}
