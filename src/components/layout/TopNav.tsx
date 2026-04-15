@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Search, Bell, Plus, ChevronDown, Settings, Heart, MessageCircle, Users, Star, Zap } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import patoLogo from "@/assets/pato-logo.png";
+import patoLogo from "@/assets/logo.svg";
 import duckAvatar1 from "@/assets/duck-avatar-1.png";
 import duckAvatar2 from "@/assets/duck-avatar-2.png";
 import duckAvatar3 from "@/assets/duck-avatar-3.png";

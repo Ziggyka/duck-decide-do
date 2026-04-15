@@ -7,6 +7,8 @@ interface GroupCardProps {
     description: string;
     emoji: string;
     cover: string;
+    coverImg?: string;
+    avatarImg?: string;
     members: number;
     posts: number;
     isPublic: boolean;
@@ -20,8 +22,14 @@ const GroupCard = ({ group, onOpen, onJoin }: GroupCardProps) => {
   return (
     <div className="pato-card p-0 overflow-hidden group cursor-pointer transition-all duration-200 hover:shadow-lg hover:border-primary/30" onClick={() => group.isMember ? onOpen(group.id) : undefined}>
       {/* Cover */}
-      <div className="h-28 bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center text-5xl relative overflow-hidden">
-        {group.cover}
+      <div className="h-28 relative overflow-hidden">
+        {group.coverImg ? (
+          <img src={group.coverImg} alt="" className="w-full h-full object-cover" />
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center text-5xl">
+            {group.cover}
+          </div>
+        )}
         <div className="absolute top-2 right-2">
           {group.isPublic ? (
             <span className="tag-pill bg-card/80 backdrop-blur text-muted-foreground text-[10px] flex items-center gap-1"><Globe className="w-3 h-3" /> Público</span>
@@ -33,7 +41,11 @@ const GroupCard = ({ group, onOpen, onJoin }: GroupCardProps) => {
       {/* Body */}
       <div className="p-4 space-y-3">
         <div className="flex items-start gap-3">
-          <span className="text-3xl">{group.emoji}</span>
+          {group.avatarImg ? (
+            <img src={group.avatarImg} alt={group.name} className="w-12 h-12 rounded-full border-2 border-border object-cover flex-shrink-0" />
+          ) : (
+            <span className="text-3xl flex-shrink-0">{group.emoji}</span>
+          )}
           <div className="flex-1 min-w-0">
             <h3 className="font-display font-bold text-sm truncate">{group.name}</h3>
             <p className="text-xs text-muted-foreground line-clamp-2 mt-0.5">{group.description}</p>

@@ -50,13 +50,13 @@
     --streak: 25 95% 53%;
     --level-glow: 316 100% 45%;
 
-    --sidebar-background: 330 100% 50%;
+    --sidebar-background: 316 100% 45%;
     --sidebar-foreground: 0 0% 100%;
     --sidebar-primary: 0 0% 100%;
-    --sidebar-primary-foreground: 330 100% 50%;
-    --sidebar-accent: 330 100% 60%;
+    --sidebar-primary-foreground: 316 100% 45%;
+    --sidebar-accent: 316 100% 55%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 330 100% 42%;
+    --sidebar-border: 316 100% 38%;
     --sidebar-ring: 0 0% 100%;
 
     --sidebar-right-bg: 46 100% 49%;
