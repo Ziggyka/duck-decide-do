@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Eye, EyeOff, Mail, Lock } from "lucide-react";
-import patoLogo from "@/assets/pato-logo.png";
+import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
+import { toast } from "sonner";
+import bgLogin from "@/assets/bg-login.svg";
+import logoSvg from "@/assets/logo.svg";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -10,52 +12,81 @@ const LoginPage = () => {
   const [isSignup, setIsSignup] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setTimeout(() => {
-      navigate("/loading");
-    }, 600);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+
+  const validate = () => {
+    const e: Record<string, string> = {};
+    if (isSignup && !name.trim()) e.name = "Nome é obrigatório";
+    if (!email.trim()) e.email = "Email é obrigatório";
+    else if (!/\S+@\S+\.\S+/.test(email)) e.email = "Email inválido";
+    if (!password) e.password = "Senha é obrigatória";
+    else if (password.length < 6) e.password = "Mínimo 6 caracteres";
+    return e;
   };
 
+  const handleBlur = (field: string) => {
+    setTouched(prev => ({ ...prev, [field]: true }));
+    setErrors(validate());
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const errs = validate();
+    setErrors(errs);
+    setTouched({ name: true, email: true, password: true });
+    if (Object.keys(errs).length > 0) {
+      toast.error("Preencha todos os campos corretamente");
+      return;
+    }
+    setLoading(true);
+    toast.success(isSignup ? "Conta criada com sucesso! 🦆" : "Login realizado! 🦆");
+    setTimeout(() => navigate("/loading"), 800);
+  };
+
+  const inputClass = (field: string) =>
+    `w-full py-3 rounded-xl border text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 placeholder:text-muted-foreground bg-card text-foreground ${
+      touched[field] && errors[field]
+        ? "border-destructive focus:ring-destructive/50"
+        : "border-border focus:ring-primary/50 focus:border-primary"
+    }`;
+
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex relative overflow-hidden">
+      {/* Full-screen BG */}
+      <img
+        src={bgLogin}
+        alt=""
+        className="absolute inset-0 w-full h-full object-cover z-0"
+      />
+      <div className="absolute inset-0 bg-black/20 z-[1]" />
+
       {/* Left — Branding */}
-      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-gradient-to-br from-primary via-primary/80 to-accent items-center justify-center p-12">
-        {/* Decorative blobs */}
-        <div className="absolute -top-20 -left-20 w-80 h-80 rounded-full bg-accent/20 blur-3xl" />
-        <div className="absolute -bottom-32 -right-20 w-96 h-96 rounded-full bg-primary-foreground/10 blur-3xl" />
-        <div className="absolute top-1/3 right-10 w-40 h-40 rounded-full bg-accent/30 blur-2xl" />
-
-        <div className="relative z-10 text-center space-y-8 max-w-md">
-          {/* Duck illustration */}
-          <div className="relative mx-auto w-48 h-48">
-            <div className="absolute inset-0 rounded-full bg-accent/30 animate-pulse" />
-            <div className="relative w-full h-full flex items-center justify-center text-[120px] drop-shadow-2xl animate-[bounce_3s_ease-in-out_infinite]">
-              🦆
-            </div>
-          </div>
-
-          <img src={patoLogo} alt="Pato App" className="w-16 h-16 mx-auto drop-shadow-lg" />
-          <h1 className="font-display text-4xl font-extrabold text-primary-foreground leading-tight">
-            Pato App
-          </h1>
-          <p className="text-primary-foreground/80 text-lg font-medium">
+      <div className="hidden lg:flex lg:w-1/2 relative z-10 items-center justify-center p-12">
+        <div className="relative z-10 text-center space-y-8 max-w-md animate-[fadeInUp_0.8s_ease-out]">
+          <img
+            src={logoSvg}
+            alt="Pato App"
+            className="w-72 mx-auto drop-shadow-2xl animate-[fadeInUp_0.6s_ease-out]"
+          />
+          <p className="text-white text-xl font-bold drop-shadow-lg leading-relaxed">
             Nunca mais perca tempo decidindo o que fazer 🦆
           </p>
-          <p className="text-primary-foreground/60 text-sm">
+          <p className="text-white/80 text-sm font-medium drop-shadow">
             Seu próximo rolê começa aqui
           </p>
         </div>
       </div>
 
       {/* Right — Form */}
-      <div className="flex-1 flex items-center justify-center p-6 bg-background">
-        <div className="w-full max-w-md space-y-8">
+      <div className="flex-1 flex items-center justify-center p-6 relative z-10">
+        <div className="w-full max-w-md space-y-7 bg-card/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-border/50 animate-[fadeInUp_0.6s_ease-out]">
           {/* Mobile logo */}
           <div className="lg:hidden text-center space-y-3">
-            <div className="text-6xl">🦆</div>
-            <h1 className="font-display text-2xl font-bold text-foreground">Pato App</h1>
+            <img src={logoSvg} alt="Pato App" className="w-40 mx-auto" />
           </div>
 
           <div className="space-y-2">
@@ -67,17 +98,24 @@ const LoginPage = () => {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-4">
             {isSignup && (
-              <div className="space-y-1.5">
+              <div className="space-y-1.5 animate-[fadeInUp_0.3s_ease-out]">
                 <label className="text-sm font-medium text-foreground">Nome</label>
                 <div className="relative">
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <input
                     type="text"
                     placeholder="Seu nome de pato"
-                    className="w-full pl-4 pr-4 py-3 rounded-xl border border-border bg-card text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                    onBlur={() => handleBlur("name")}
+                    className={`${inputClass("name")} pl-10 pr-4`}
                   />
                 </div>
+                {touched.name && errors.name && (
+                  <p className="text-xs text-destructive animate-[fadeInUp_0.2s_ease-out]">{errors.name}</p>
+                )}
               </div>
             )}
 
@@ -88,9 +126,15 @@ const LoginPage = () => {
                 <input
                   type="email"
                   placeholder="seupato@email.com"
-                  className="w-full pl-10 pr-4 py-3 rounded-xl border border-border bg-card text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  onBlur={() => handleBlur("email")}
+                  className={`${inputClass("email")} pl-10 pr-4`}
                 />
               </div>
+              {touched.email && errors.email && (
+                <p className="text-xs text-destructive animate-[fadeInUp_0.2s_ease-out]">{errors.email}</p>
+              )}
             </div>
 
             <div className="space-y-1.5">
@@ -100,16 +144,22 @@ const LoginPage = () => {
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
-                  className="w-full pl-10 pr-12 py-3 rounded-xl border border-border bg-card text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  onBlur={() => handleBlur("password")}
+                  className={`${inputClass("password")} pl-10 pr-12`}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors hover:scale-110 active:scale-95 duration-150"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
+              {touched.password && errors.password && (
+                <p className="text-xs text-destructive animate-[fadeInUp_0.2s_ease-out]">{errors.password}</p>
+              )}
             </div>
 
             {!isSignup && (
@@ -118,12 +168,12 @@ const LoginPage = () => {
                   <input
                     type="checkbox"
                     checked={remember}
-                    onChange={(e) => setRemember(e.target.checked)}
-                    className="w-4 h-4 rounded border-border text-primary focus:ring-primary"
+                    onChange={e => setRemember(e.target.checked)}
+                    className="w-4 h-4 rounded border-border text-primary focus:ring-primary accent-primary"
                   />
                   <span className="text-sm text-muted-foreground">Lembrar de mim</span>
                 </label>
-                <button type="button" className="text-sm text-primary hover:underline font-medium">
+                <button type="button" className="text-sm text-primary hover:underline font-medium transition-colors hover:text-primary/80">
                   Esqueci minha senha
                 </button>
               </div>
@@ -132,14 +182,14 @@ const LoginPage = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 rounded-xl bg-primary text-primary-foreground font-display font-bold text-sm hover:bg-primary/90 pato-btn-bounce transition-all disabled:opacity-60 flex items-center justify-center gap-2"
+              className="w-full py-3 rounded-xl bg-primary text-primary-foreground font-display font-bold text-sm transition-all duration-200 hover:brightness-110 hover:shadow-lg hover:shadow-primary/30 active:scale-[0.98] disabled:opacity-60 flex items-center justify-center gap-2"
             >
               {loading ? (
                 <>
                   <span className="w-4 h-4 border-2 border-primary-foreground/40 border-t-primary-foreground rounded-full animate-spin" />
-                  Entrando...
+                  {isSignup ? "Criando..." : "Entrando..."}
                 </>
-              ) : isSignup ? "Criar conta" : "Entrar"}
+              ) : isSignup ? "Criar conta 🦆" : "Entrar 🦆"}
             </button>
           </form>
 
@@ -152,7 +202,7 @@ const LoginPage = () => {
 
           {/* Social */}
           <div className="grid grid-cols-2 gap-3">
-            <button className="flex items-center justify-center gap-2 py-3 rounded-xl border border-border bg-card hover:bg-muted transition-colors text-sm font-medium text-foreground pato-btn-bounce">
+            <button className="flex items-center justify-center gap-2 py-3 rounded-xl border border-border bg-card hover:bg-muted hover:shadow-md active:scale-[0.97] transition-all duration-200 text-sm font-medium text-foreground">
               <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/>
                 <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -161,7 +211,7 @@ const LoginPage = () => {
               </svg>
               Google
             </button>
-            <button className="flex items-center justify-center gap-2 py-3 rounded-xl border border-border bg-card hover:bg-muted transition-colors text-sm font-medium text-foreground pato-btn-bounce">
+            <button className="flex items-center justify-center gap-2 py-3 rounded-xl border border-border bg-card hover:bg-muted hover:shadow-md active:scale-[0.97] transition-all duration-200 text-sm font-medium text-foreground">
               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
               </svg>
@@ -174,8 +224,8 @@ const LoginPage = () => {
             {isSignup ? "Já tem conta?" : "Não tem conta?"}{" "}
             <button
               type="button"
-              onClick={() => setIsSignup(!isSignup)}
-              className="text-primary font-semibold hover:underline"
+              onClick={() => { setIsSignup(!isSignup); setErrors({}); setTouched({}); }}
+              className="text-primary font-semibold hover:underline transition-colors"
             >
               {isSignup ? "Entrar" : "Criar conta"}
             </button>

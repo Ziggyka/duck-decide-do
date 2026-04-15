@@ -22,38 +22,44 @@ const RightSidebar = () => {
   const handleHide = (name: string) => { setHidden(prev => [...prev, name]); toast(`${name} ocultado`); };
   const handleUnfriend = (name: string) => { setFriends(prev => prev.filter(f => f.name !== name)); toast(`Amizade com ${name} desfeita`); };
 
+  // Right sidebar uses yellow theme
+  const cardClass = "rounded-2xl border p-4 shadow-sm hover:shadow-md transition-shadow duration-200";
+  const cardBg = "bg-white/20 border-white/20";
+  const textMain = "text-[hsl(var(--sidebar-right-fg))]";
+  const textMuted = "text-[hsl(var(--sidebar-right-fg))]/60";
+
   return (
     <aside className="sidebar-right py-4 px-3 flex flex-col gap-4">
       {/* AI Suggestion */}
-      <div className="pato-card border-primary/30 bg-pink-soft">
+      <div className={`${cardClass} bg-white/30 border-white/30`}>
         <div className="flex items-center gap-2 mb-2">
-          <Sparkles className="w-4 h-4 text-accent" />
-          <span className="text-xs font-semibold text-primary">Sugestão da IA</span>
+          <Sparkles className="w-4 h-4 text-[hsl(var(--sidebar-right-fg))]" />
+          <span className={`text-xs font-semibold ${textMain}`}>Sugestão da IA</span>
         </div>
-        <p className="text-sm font-medium">"Hoje é um bom dia para maratonar um anime com amigos! 🍿"</p>
-        <button className="mt-3 w-full text-xs font-semibold text-primary hover:underline">
+        <p className={`text-sm font-medium ${textMain}`}>"Hoje é um bom dia para maratonar um anime com amigos! 🍿"</p>
+        <button className={`mt-3 w-full text-xs font-semibold ${textMain} hover:underline`}>
           Ver sugestões →
         </button>
       </div>
 
       {/* Online Friends */}
-      <div className="pato-card">
-        <h3 className="font-display text-sm font-semibold mb-3 flex items-center gap-2">
+      <div className={`${cardClass} ${cardBg}`}>
+        <h3 className={`font-display text-sm font-semibold mb-3 flex items-center gap-2 ${textMain}`}>
           <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
           Amigos Online
         </h3>
         <div className="space-y-2.5">
           {visibleFriends.map((f) => (
             <div key={f.name} className="flex items-center gap-2.5 group">
-              <img src={f.avatar} alt={f.name} className="w-8 h-8 rounded-full bg-duck-yellow-light border border-border" />
+              <img src={f.avatar} alt={f.name} className="w-8 h-8 rounded-full bg-white/40 border border-white/30" />
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium truncate">{f.name}</p>
-                <p className="text-xs text-muted-foreground">{f.status}</p>
+                <p className={`text-sm font-medium truncate ${textMain}`}>{f.name}</p>
+                <p className={`text-xs ${textMuted}`}>{f.status}</p>
               </div>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="opacity-0 group-hover:opacity-100 p-1 rounded-lg hover:bg-muted transition-all">
-                    <MoreVertical className="w-4 h-4 text-muted-foreground" />
+                  <button className="opacity-0 group-hover:opacity-100 p-1 rounded-lg hover:bg-white/20 transition-all">
+                    <MoreVertical className={`w-4 h-4 ${textMuted}`} />
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-44">
@@ -74,18 +80,18 @@ const RightSidebar = () => {
       </div>
 
       {/* Group Invites */}
-      <div className="pato-card">
-        <h3 className="font-display text-sm font-semibold mb-3 flex items-center gap-2">
-          <UserPlus className="w-4 h-4 text-primary" />
+      <div className={`${cardClass} ${cardBg}`}>
+        <h3 className={`font-display text-sm font-semibold mb-3 flex items-center gap-2 ${textMain}`}>
+          <UserPlus className={`w-4 h-4 ${textMain}`} />
           Convites
         </h3>
         <div className="space-y-2">
-          <div className="flex items-center justify-between p-2 rounded-xl bg-muted/50">
+          <div className="flex items-center justify-between p-2 rounded-xl bg-white/15">
             <div>
-              <p className="text-sm font-medium">Turma do Cinema</p>
-              <p className="text-xs text-muted-foreground">5 membros</p>
+              <p className={`text-sm font-medium ${textMain}`}>Turma do Cinema</p>
+              <p className={`text-xs ${textMuted}`}>5 membros</p>
             </div>
-            <button className="pato-btn-bounce px-3 py-1 rounded-lg bg-primary text-primary-foreground text-xs font-semibold">
+            <button className="pato-btn-bounce px-3 py-1 rounded-lg bg-secondary text-secondary-foreground text-xs font-semibold">
               Entrar
             </button>
           </div>
@@ -93,37 +99,37 @@ const RightSidebar = () => {
       </div>
 
       {/* Upcoming Event */}
-      <div className="pato-card">
-        <h3 className="font-display text-sm font-semibold mb-3 flex items-center gap-2">
-          <Calendar className="w-4 h-4 text-accent" />
+      <div className={`${cardClass} ${cardBg}`}>
+        <h3 className={`font-display text-sm font-semibold mb-3 flex items-center gap-2 ${textMain}`}>
+          <Calendar className={`w-4 h-4 ${textMain}`} />
           Próximo Evento
         </h3>
-        <div className="p-3 rounded-xl bg-muted/50">
-          <p className="text-sm font-semibold">Noite de Board Games</p>
-          <p className="text-xs text-muted-foreground mt-1">Sábado, 20:00 • 6 participantes</p>
+        <div className="p-3 rounded-xl bg-white/15">
+          <p className={`text-sm font-semibold ${textMain}`}>Noite de Board Games</p>
+          <p className={`text-xs ${textMuted} mt-1`}>Sábado, 20:00 • 6 participantes</p>
           <div className="flex -space-x-2 mt-2">
             {[duckAvatar2, duckAvatar3, duckAvatar2].map((a, i) => (
-              <img key={i} src={a} alt="" className="w-6 h-6 rounded-full border-2 border-card bg-duck-yellow-light" />
+              <img key={i} src={a} alt="" className="w-6 h-6 rounded-full border-2 border-white/30 bg-white/40" />
             ))}
-            <span className="w-6 h-6 rounded-full border-2 border-card bg-muted flex items-center justify-center text-[10px] font-bold">+3</span>
+            <span className={`w-6 h-6 rounded-full border-2 border-white/30 bg-white/30 flex items-center justify-center text-[10px] font-bold ${textMain}`}>+3</span>
           </div>
         </div>
       </div>
 
       {/* Weekly Challenge */}
-      <div className="pato-card border-primary/30 bg-primary/5">
+      <div className={`${cardClass} bg-white/30 border-white/30`}>
         <div className="flex items-center gap-2 mb-2">
-          <Zap className="w-4 h-4 text-primary" />
-          <span className="text-xs font-semibold text-primary">Desafio Semanal</span>
+          <Zap className={`w-4 h-4 ${textMain}`} />
+          <span className={`text-xs font-semibold ${textMain}`}>Desafio Semanal</span>
         </div>
-        <p className="text-sm font-medium">Complete 3 atividades em grupo</p>
+        <p className={`text-sm font-medium ${textMain}`}>Complete 3 atividades em grupo</p>
         <div className="mt-2">
-          <div className="flex justify-between text-xs mb-1">
+          <div className={`flex justify-between text-xs mb-1 ${textMain}`}>
             <span>1/3 completas</span>
-            <span className="text-primary font-semibold">+150 XP</span>
+            <span className="font-semibold">+150 XP</span>
           </div>
-          <div className="xp-bar">
-            <div className="xp-bar-fill bg-primary" style={{ width: "33%" }} />
+          <div className="h-3 rounded-full bg-white/20 overflow-hidden">
+            <div className="h-full rounded-full bg-secondary transition-all duration-700 ease-out" style={{ width: "33%" }} />
           </div>
         </div>
       </div>
