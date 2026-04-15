@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Heart, MessageCircle, ListPlus, Star, Award, Image as ImageIcon, Smile, AtSign, Send, Users, ListChecks } from "lucide-react";
+import { Heart, MessageCircle, ListPlus, Star, Award, Image as ImageIcon, Smile, AtSign, Send, ListChecks } from "lucide-react";
 import duckAvatar1 from "@/assets/duck-avatar-1.png";
 import duckAvatar2 from "@/assets/duck-avatar-2.png";
 import duckAvatar3 from "@/assets/duck-avatar-3.png";
@@ -15,14 +15,12 @@ interface FeedPost {
   avatar: string;
   type: PostType;
   content: string;
-  // Quack-specific fields
   quackTitle?: string;
   quackCategory?: string;
   quackStatus?: string;
   quackRating?: number;
   quackTags?: string[];
   quackChecklist?: { done: number; total: number };
-  // General
   likes: number;
   comments: number;
   time: string;
@@ -75,7 +73,7 @@ const initialPosts: FeedPost[] = [
 const StarRating = ({ rating }: { rating: number }) => (
   <div className="flex gap-0.5">
     {[1, 2, 3, 4, 5].map((s) => (
-      <Star key={s} className={cn("w-4 h-4", s <= rating ? "fill-accent text-accent" : "text-muted")} />
+      <Star key={s} className={cn("w-3.5 h-3.5", s <= rating ? "fill-primary text-primary" : "text-muted")} />
     ))}
   </div>
 );
@@ -140,10 +138,7 @@ const FeedPage = () => {
         {posts.map((post, i) => (
           <div
             key={post.id}
-            className={cn(
-              "pato-card animate-fade-in",
-              post.type === "quack_update" && "border-l-4 border-l-primary/40"
-            )}
+            className="pato-card animate-fade-in"
             style={{ animationDelay: `${i * 80}ms` }}
           >
             {/* Header */}
@@ -160,36 +155,41 @@ const FeedPage = () => {
               </div>
             </div>
 
-            {/* Content */}
-            <p className="text-sm mb-3 leading-relaxed">{post.content}</p>
+            {/* Simple post content */}
+            {post.type === "simple" && (
+              <p className="text-sm mb-3 leading-relaxed">{post.content}</p>
+            )}
 
-            {/* Quack card embed */}
+            {/* Quack activity card - same pattern as profile activities tab */}
             {post.type === "quack_update" && post.quackTitle && (
-              <div className="p-4 rounded-xl bg-muted/50 border border-border mb-3 space-y-2">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <h4 className="font-display font-bold text-sm">{post.quackTitle}</h4>
-                  {post.quackCategory && <span className="tag-pill bg-muted text-muted-foreground text-[10px]">{post.quackCategory}</span>}
-                  {post.quackStatus && (
-                    <span className={cn("tag-pill text-[10px] font-semibold", statusMeta[post.quackStatus]?.color)}>
-                      {statusMeta[post.quackStatus]?.emoji} {statusMeta[post.quackStatus]?.label}
-                    </span>
+              <div className="flex items-center gap-4 p-4 rounded-xl bg-muted/50 border border-border mb-3">
+                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <Star className="w-6 h-6 text-primary" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-sm">{post.quackTitle}</p>
+                  <p className="text-xs text-muted-foreground">{post.quackCategory}</p>
+                  {post.quackTags && post.quackTags.length > 0 && (
+                    <div className="flex gap-1.5 mt-1">
+                      {post.quackTags.map(tag => <span key={tag} className="tag-pill bg-primary/10 text-primary text-[10px]">#{tag}</span>)}
+                    </div>
+                  )}
+                  {post.quackChecklist && (
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
+                      <ListChecks className="w-3.5 h-3.5" />
+                      <span>{post.quackChecklist.done}/{post.quackChecklist.total} tarefas</span>
+                      <div className="flex-1 h-1.5 rounded-full bg-muted overflow-hidden max-w-[120px]">
+                        <div className="h-full rounded-full bg-success" style={{ width: `${(post.quackChecklist.done / post.quackChecklist.total) * 100}%` }} />
+                      </div>
+                    </div>
                   )}
                 </div>
-                {post.quackTags && post.quackTags.length > 0 && (
-                  <div className="flex gap-1.5">
-                    {post.quackTags.map(tag => <span key={tag} className="tag-pill bg-primary/10 text-primary text-[10px]">#{tag}</span>)}
-                  </div>
-                )}
-                {post.quackChecklist && (
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <ListChecks className="w-3.5 h-3.5" />
-                    <span>{post.quackChecklist.done}/{post.quackChecklist.total} tarefas</span>
-                    <div className="flex-1 h-1.5 rounded-full bg-muted overflow-hidden max-w-[120px]">
-                      <div className="h-full rounded-full bg-success" style={{ width: `${(post.quackChecklist.done / post.quackChecklist.total) * 100}%` }} />
-                    </div>
-                  </div>
-                )}
                 {post.quackRating && post.quackRating > 0 && <StarRating rating={post.quackRating} />}
+                {post.quackStatus && (
+                  <span className={cn("tag-pill text-[10px] font-semibold flex-shrink-0", statusMeta[post.quackStatus]?.color)}>
+                    {statusMeta[post.quackStatus]?.emoji} {statusMeta[post.quackStatus]?.label}
+                  </span>
+                )}
               </div>
             )}
 
@@ -201,7 +201,7 @@ const FeedPage = () => {
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-success">Conquista Desbloqueada!</p>
-                  <p className="text-xs text-muted-foreground">+200 XP</p>
+                  <p className="text-xs text-muted-foreground">{post.content}</p>
                 </div>
               </div>
             )}
