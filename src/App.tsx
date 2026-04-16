@@ -18,6 +18,7 @@ import PatoVidentePage from "./pages/PatoVidentePage";
 import SettingsPage from "./pages/SettingsPage";
 import ChatPage from "./pages/ChatPage";
 import AchievementsPage from "./pages/AchievementsPage";
+import NotificationsPage from "./pages/NotificationsPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -44,6 +45,7 @@ const App = () => (
           <Route path="/pato-vidente" element={<PatoVidentePage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/chat" element={<ChatPage />} />
+          <Route path="/notifications" element={<NotificationsPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
