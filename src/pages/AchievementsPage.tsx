@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Trophy, Lock, Star, Flame, Users, MessageCircle, Target, Zap, Award } from "lucide-react";
+import { Trophy, Lock, Zap, Award, Share2 } from "lucide-react";
 import AppLayout from "@/components/layout/AppLayout";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 interface Achievement {
   id: string;
@@ -34,15 +35,24 @@ const categories = ["Todas", "Geral", "Atividades", "Social", "Streak", "Desafio
 
 const AchievementsPage = () => {
   const [filter, setFilter] = useState("Todas");
+  const [sharePreview, setSharePreview] = useState<Achievement | null>(null);
 
   const filtered = filter === "Todas" ? achievements : achievements.filter(a => a.category === filter);
   const unlocked = achievements.filter(a => a.unlocked).length;
   const totalXp = achievements.filter(a => a.unlocked).reduce((sum, a) => sum + a.xp, 0);
 
+  const handleShare = (a: Achievement) => {
+    setSharePreview(a);
+  };
+
+  const shareToSocial = (platform: string) => {
+    toast.success(`Compartilhado no ${platform}! 🎉`);
+    setSharePreview(null);
+  };
+
   return (
     <AppLayout>
       <div className="max-w-4xl mx-auto space-y-6">
-        {/* Header */}
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-display font-bold flex items-center gap-2">
@@ -62,75 +72,79 @@ const AchievementsPage = () => {
           </div>
         </div>
 
-        {/* Category filter */}
         <div className="flex gap-2 overflow-x-auto pb-1">
           {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setFilter(cat)}
-              className={cn(
-                "tag-pill py-2 px-4 text-sm font-medium transition-all whitespace-nowrap",
-                filter === cat
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-muted text-muted-foreground hover:bg-muted/80"
-              )}
-            >
+            <button key={cat} onClick={() => setFilter(cat)} className={cn("tag-pill py-2 px-4 text-sm font-medium transition-all whitespace-nowrap", filter === cat ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/80")}>
               {cat}
             </button>
           ))}
         </div>
 
-        {/* Achievement grid */}
         <div className="grid grid-cols-3 gap-4">
           {filtered.map((a, i) => (
-            <div
-              key={a.id}
-              className={cn(
-                "pato-card p-5 text-center transition-all animate-fade-in relative overflow-hidden group",
-                a.unlocked
-                  ? "border-accent/30 hover:border-accent/60"
-                  : "opacity-75 hover:opacity-100"
-              )}
-              style={{ animationDelay: `${i * 50}ms` }}
-            >
+            <div key={a.id} className={cn("pato-card p-5 text-center transition-all animate-fade-in relative overflow-hidden group", a.unlocked ? "border-accent/30 hover:border-accent/60" : "opacity-75 hover:opacity-100")} style={{ animationDelay: `${i * 50}ms` }}>
               {a.unlocked && (
-                <div className="absolute top-2 right-2">
+                <div className="absolute top-2 right-2 flex items-center gap-1">
+                  <button onClick={() => handleShare(a)} className="p-1.5 rounded-lg hover:bg-muted transition-colors opacity-0 group-hover:opacity-100" title="Compartilhar">
+                    <Share2 className="w-3.5 h-3.5 text-primary" />
+                  </button>
                   <span className="tag-pill bg-success/15 text-success text-[10px] font-bold">Desbloqueado</span>
                 </div>
               )}
-              {!a.unlocked && (
-                <div className="absolute top-2 right-2">
-                  <Lock className="w-4 h-4 text-muted-foreground" />
-                </div>
-              )}
+              {!a.unlocked && <div className="absolute top-2 right-2"><Lock className="w-4 h-4 text-muted-foreground" /></div>}
               <span className={cn("text-4xl block mb-3", !a.unlocked && "grayscale opacity-50")}>{a.icon}</span>
               <h3 className="font-display font-bold text-sm mb-1">{a.title}</h3>
               <p className="text-xs text-muted-foreground mb-3">{a.description}</p>
-
               {a.progress && !a.unlocked && (
                 <div className="mb-3">
                   <div className="flex justify-between text-[10px] text-muted-foreground mb-1">
-                    <span>Progresso</span>
-                    <span>{a.progress.current}/{a.progress.total}</span>
+                    <span>Progresso</span><span>{a.progress.current}/{a.progress.total}</span>
                   </div>
                   <div className="h-2 rounded-full bg-muted overflow-hidden">
                     <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${(a.progress.current / a.progress.total) * 100}%` }} />
                   </div>
                 </div>
               )}
-
               <div className="flex items-center justify-center gap-2">
                 <span className="tag-pill bg-primary/15 text-primary text-[10px] font-bold">+{a.xp} XP</span>
                 <span className="tag-pill bg-muted text-muted-foreground text-[10px]">{a.category}</span>
               </div>
-
-              {a.unlocked && a.unlockedDate && (
-                <p className="text-[10px] text-muted-foreground mt-2">{a.unlockedDate}</p>
-              )}
+              {a.unlocked && a.unlockedDate && <p className="text-[10px] text-muted-foreground mt-2">{a.unlockedDate}</p>}
             </div>
           ))}
         </div>
       </div>
+
+      {/* Share Preview Modal */}
+      {sharePreview && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setSharePreview(null)}>
+          <div className="bg-card rounded-2xl border border-border shadow-2xl max-w-sm w-full p-6 animate-fade-in" onClick={e => e.stopPropagation()}>
+            {/* Preview card */}
+            <div className="bg-gradient-to-br from-primary/20 to-accent/20 rounded-xl p-6 text-center mb-4">
+              <span className="text-5xl block mb-3">{sharePreview.icon}</span>
+              <h3 className="font-display font-bold text-lg">{sharePreview.title}</h3>
+              <p className="text-xs text-muted-foreground mt-1">{sharePreview.description}</p>
+              <p className="text-[10px] text-muted-foreground mt-2">🦆 Pato App • +{sharePreview.xp} XP</p>
+            </div>
+            <h4 className="font-display font-semibold text-sm mb-3">Compartilhar em:</h4>
+            <div className="grid grid-cols-2 gap-2">
+              <button onClick={() => shareToSocial("Instagram Stories")} className="pato-btn-bounce flex items-center justify-center gap-2 py-2.5 rounded-xl border border-border bg-gradient-to-r from-purple-500/10 to-pink-500/10 text-sm font-medium hover:shadow-md transition-all">
+                📸 Instagram
+              </button>
+              <button onClick={() => shareToSocial("Twitter/X")} className="pato-btn-bounce flex items-center justify-center gap-2 py-2.5 rounded-xl border border-border bg-muted/50 text-sm font-medium hover:shadow-md transition-all">
+                🐦 Twitter/X
+              </button>
+              <button onClick={() => shareToSocial("WhatsApp")} className="pato-btn-bounce flex items-center justify-center gap-2 py-2.5 rounded-xl border border-border bg-success/10 text-sm font-medium hover:shadow-md transition-all">
+                💬 WhatsApp
+              </button>
+              <button onClick={() => shareToSocial("Link copiado")} className="pato-btn-bounce flex items-center justify-center gap-2 py-2.5 rounded-xl border border-border bg-muted/50 text-sm font-medium hover:shadow-md transition-all">
+                🔗 Copiar link
+              </button>
+            </div>
+            <button onClick={() => setSharePreview(null)} className="w-full mt-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors">Cancelar</button>
+          </div>
+        </div>
+      )}
     </AppLayout>
   );
 };

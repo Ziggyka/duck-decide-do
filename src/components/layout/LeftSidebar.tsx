@@ -1,6 +1,6 @@
 import { 
   Newspaper, ListChecks, Shuffle, Users, Swords, Trophy, Award,
-  Camera, User, Settings, Flame, Sparkles, MessageCircle, ChevronLeft, ChevronRight, MessagesSquare
+  Camera, User, Settings, Flame, Sparkles, ChevronLeft, ChevronRight, MessageCircle
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSidebarCollapse } from "./AppLayout";
@@ -15,6 +15,7 @@ const navItems = [
   { icon: Swords, label: "Meus Desafios", path: "/challenges" },
   { icon: Award, label: "Conquistas", path: "/achievements" },
   { icon: Camera, label: "Memórias", path: "/memories" },
+  { icon: MessageCircle, label: "Chat", path: "/chat" },
   { icon: User, label: "Perfil", path: "/profile" },
   { icon: Settings, label: "Configurações", path: "/settings" },
 ];
@@ -26,7 +27,6 @@ const LeftSidebar = () => {
 
   return (
     <aside className={`bg-sidebar text-sidebar-foreground border-r border-sidebar-border flex-shrink-0 h-[calc(100vh-4rem)] sticky top-16 overflow-y-auto py-4 px-3 flex flex-col gap-1 transition-all duration-300 ${collapsed ? "w-[72px]" : "w-60"}`}>
-      {/* Collapse toggle */}
       <button
         onClick={() => setCollapsed(!collapsed)}
         className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-white/15 transition-colors mb-2 self-end"
@@ -78,9 +78,7 @@ const LeftSidebar = () => {
           return (
             <Tooltip key={item.path} delayDuration={0}>
               <TooltipTrigger asChild>{button}</TooltipTrigger>
-              <TooltipContent side="right" className="font-medium">
-                {item.label}
-              </TooltipContent>
+              <TooltipContent side="right" className="font-medium">{item.label}</TooltipContent>
             </Tooltip>
           );
         }

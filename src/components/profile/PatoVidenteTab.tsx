@@ -18,12 +18,12 @@ const platforms = [
 ];
 
 const mockRecommendations = [
-  { title: "Arcane: Season 2", category: "Série", source: "Netflix + Steam", reason: "Você joga League of Legends e assistiu a temporada 1", match: 97, emoji: "🎬" },
-  { title: "Sushi Yasuda", category: "Restaurante", source: "Google Maps", reason: "Baseado nos restaurantes japoneses que você frequenta", match: 94, emoji: "🍣" },
-  { title: "Hollow Knight: Silksong", category: "Jogo", source: "Steam", reason: "Você tem 120h em Hollow Knight e gosta de metroidvanias", match: 96, emoji: "🎮" },
-  { title: "Chainsaw Man", category: "Anime", source: "Crunchyroll", reason: "Você assistiu Jujutsu Kaisen e gosta de shonen dark", match: 91, emoji: "⚔️" },
-  { title: "Radiohead — OK Computer", category: "Álbum", source: "Spotify", reason: "Baseado no seu gosto por art rock e alt-rock", match: 89, emoji: "🎵" },
-  { title: "Escape Room — Fuga Impossível", category: "Evento", source: "Google Maps", reason: "Atividade em grupo perto de você, alta avaliação", match: 85, emoji: "🔐" },
+  { title: "Arcane: Season 2", category: "Série", source: "Netflix + Steam", reason: "Você joga League of Legends e assistiu a temporada 1", match: 97, img: "https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?w=120&h=120&fit=crop" },
+  { title: "Sushi Yasuda", category: "Restaurante", source: "Google Maps", reason: "Baseado nos restaurantes japoneses que você frequenta", match: 94, img: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=120&h=120&fit=crop" },
+  { title: "Hollow Knight: Silksong", category: "Jogo", source: "Steam", reason: "Você tem 120h em Hollow Knight e gosta de metroidvanias", match: 96, img: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=120&h=120&fit=crop" },
+  { title: "Chainsaw Man", category: "Anime", source: "Crunchyroll", reason: "Você assistiu Jujutsu Kaisen e gosta de shonen dark", match: 91, img: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=120&h=120&fit=crop" },
+  { title: "Radiohead — OK Computer", category: "Álbum", source: "Spotify", reason: "Baseado no seu gosto por art rock e alt-rock", match: 89, img: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=120&h=120&fit=crop" },
+  { title: "Escape Room — Fuga Impossível", category: "Evento", source: "Google Maps", reason: "Atividade em grupo perto de você, alta avaliação", match: 85, img: "https://images.unsplash.com/photo-1582845512747-e42001c95638?w=120&h=120&fit=crop" },
 ];
 
 const PatoVidenteTab = () => {
@@ -35,54 +35,59 @@ const PatoVidenteTab = () => {
   };
 
   return (
-    <div className="space-y-5 animate-fade-in">
-      {/* Header */}
-      <div className="pato-card p-5">
-        <div className="flex items-center gap-3 mb-3">
-          <div className="w-12 h-12 rounded-2xl bg-accent/15 flex items-center justify-center">
-            <Sparkles className="w-6 h-6 text-accent" />
-          </div>
-          <div>
-            <h2 className="font-display font-bold text-lg flex items-center gap-2">
-              🔮 Pato Vidente
-            </h2>
-            <p className="text-sm text-muted-foreground">
-              Recomendações personalizadas baseadas nas suas plataformas
-            </p>
-          </div>
+    <div className="space-y-6 animate-fade-in">
+      {/* Hero Header */}
+      <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-primary via-primary/80 to-accent p-8 text-center">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+        <div className="relative z-10">
+          <span className="text-5xl block mb-3">🔮</span>
+          <h1 className="font-display font-bold text-3xl text-white mb-2">Pato Vidente</h1>
+          <p className="text-white/80 text-sm max-w-md mx-auto mb-4">
+            Recomendações personalizadas baseadas nas suas plataformas conectadas
+          </p>
           <button
             onClick={handleRefresh}
-            className={cn("ml-auto pato-btn-bounce p-2 rounded-xl border border-border hover:bg-muted transition-colors", loading && "animate-spin")}
+            className={cn(
+              "pato-btn-bounce inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/20 backdrop-blur-sm text-white font-semibold text-sm border border-white/30 hover:bg-white/30 transition-all",
+              loading && "opacity-70"
+            )}
           >
-            <RefreshCw className="w-4 h-4" />
+            <RefreshCw className={cn("w-4 h-4", loading && "animate-spin")} />
+            Gerar novas recomendações
           </button>
         </div>
       </div>
 
       {/* Recommendations */}
-      <div className="grid grid-cols-1 gap-3">
-        {mockRecommendations.map((rec) => (
-          <div key={rec.title} className="pato-card flex items-center gap-4 hover:border-primary/50 transition-colors cursor-pointer group">
-            <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-2xl shrink-0 group-hover:scale-110 transition-transform">
-              {rec.emoji}
-            </div>
+      <div className="space-y-3">
+        {mockRecommendations.map((rec, i) => (
+          <div
+            key={rec.title}
+            className="pato-card flex items-center gap-4 hover:border-primary/50 transition-all cursor-pointer group animate-fade-in"
+            style={{ animationDelay: `${i * 60}ms` }}
+          >
+            <img
+              src={rec.img}
+              alt={rec.title}
+              className="w-16 h-16 rounded-xl object-cover flex-shrink-0 group-hover:scale-105 transition-transform"
+            />
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-0.5">
                 <p className="font-semibold text-sm truncate">{rec.title}</p>
-                <span className="tag-pill bg-accent/15 text-accent text-[10px] shrink-0">{rec.category}</span>
+                <span className="tag-pill bg-accent/15 text-accent-foreground text-[10px] shrink-0">{rec.category}</span>
               </div>
               <p className="text-xs text-muted-foreground line-clamp-1">{rec.reason}</p>
               <p className="text-[10px] text-muted-foreground/60 mt-0.5">via {rec.source}</p>
             </div>
             <div className="text-right shrink-0">
-              <p className="font-display font-bold text-lg text-primary">{rec.match}%</p>
+              <p className="font-display font-bold text-2xl text-primary">{rec.match}%</p>
               <p className="text-[10px] text-muted-foreground">match</p>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Connected Platforms - Icons in circles */}
+      {/* Connected Platforms */}
       <div className="pato-card p-5">
         <h3 className="font-display font-semibold text-sm mb-4">Plataformas Conectadas</h3>
         <div className="flex flex-wrap gap-4 justify-center">
@@ -106,9 +111,7 @@ const PatoVidenteTab = () => {
       <div className="pato-card p-5 text-center bg-gradient-to-br from-primary/5 to-accent/5">
         <p className="text-2xl mb-2">🦆✨</p>
         <p className="font-display font-semibold text-sm mb-1">Conecte mais plataformas!</p>
-        <p className="text-xs text-muted-foreground">
-          Quanto mais plataformas conectadas, melhores as recomendações do Pato Vidente.
-        </p>
+        <p className="text-xs text-muted-foreground">Quanto mais plataformas conectadas, melhores as recomendações.</p>
       </div>
     </div>
   );
