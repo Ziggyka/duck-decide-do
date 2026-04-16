@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Sparkles, Calendar, UserPlus, Zap, MoreVertical, MessageCircle, EyeOff, UserMinus } from "lucide-react";
+import { Calendar, UserPlus, MoreVertical, MessageCircle, EyeOff, UserMinus } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import duckAvatar2 from "@/assets/duck-avatar-2.png";
@@ -22,7 +22,6 @@ const RightSidebar = () => {
   const handleHide = (name: string) => { setHidden(prev => [...prev, name]); toast(`${name} ocultado`); };
   const handleUnfriend = (name: string) => { setFriends(prev => prev.filter(f => f.name !== name)); toast(`Amizade com ${name} desfeita`); };
 
-  // Right sidebar uses yellow theme
   const cardClass = "rounded-2xl border p-4 shadow-sm hover:shadow-md transition-shadow duration-200";
   const cardBg = "bg-white/20 border-white/20";
   const textMain = "text-[hsl(var(--sidebar-right-fg))]";
@@ -30,18 +29,6 @@ const RightSidebar = () => {
 
   return (
     <aside className="sidebar-right py-4 px-3 flex flex-col gap-4">
-      {/* AI Suggestion */}
-      <div className={`${cardClass} bg-white/30 border-white/30`}>
-        <div className="flex items-center gap-2 mb-2">
-          <Sparkles className="w-4 h-4 text-[hsl(var(--sidebar-right-fg))]" />
-          <span className={`text-xs font-semibold ${textMain}`}>Sugestão da IA</span>
-        </div>
-        <p className={`text-sm font-medium ${textMain}`}>"Hoje é um bom dia para maratonar um anime com amigos! 🍿"</p>
-        <button className={`mt-3 w-full text-xs font-semibold ${textMain} hover:underline`}>
-          Ver sugestões →
-        </button>
-      </div>
-
       {/* Online Friends */}
       <div className={`${cardClass} ${cardBg}`}>
         <h3 className={`font-display text-sm font-semibold mb-3 flex items-center gap-2 ${textMain}`}>
@@ -112,24 +99,6 @@ const RightSidebar = () => {
               <img key={i} src={a} alt="" className="w-6 h-6 rounded-full border-2 border-white/30 bg-white/40" />
             ))}
             <span className={`w-6 h-6 rounded-full border-2 border-white/30 bg-white/30 flex items-center justify-center text-[10px] font-bold ${textMain}`}>+3</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Weekly Challenge */}
-      <div className={`${cardClass} bg-white/30 border-white/30`}>
-        <div className="flex items-center gap-2 mb-2">
-          <Zap className={`w-4 h-4 ${textMain}`} />
-          <span className={`text-xs font-semibold ${textMain}`}>Desafio Semanal</span>
-        </div>
-        <p className={`text-sm font-medium ${textMain}`}>Complete 3 atividades em grupo</p>
-        <div className="mt-2">
-          <div className={`flex justify-between text-xs mb-1 ${textMain}`}>
-            <span>1/3 completas</span>
-            <span className="font-semibold">+150 XP</span>
-          </div>
-          <div className="h-3 rounded-full bg-white/20 overflow-hidden">
-            <div className="h-full rounded-full bg-secondary transition-all duration-700 ease-out" style={{ width: "33%" }} />
           </div>
         </div>
       </div>

@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import bgLogin from "@/assets/bg-login.svg";
+import simbSvg from "@/assets/simb.svg";
 
 const messages = [
   "Preparando seu próximo rolê...",
@@ -47,63 +49,54 @@ const LoadingPage = () => {
   }, [progress, navigate]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-background relative overflow-hidden">
-      {/* Subtle gradient blobs */}
-      <div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-primary/5 blur-3xl" />
-      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full bg-accent/5 blur-3xl" />
+    <div className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden">
+      {/* Same background as login */}
+      <img src={bgLogin} alt="" className="absolute inset-0 w-full h-full object-cover z-0" />
+      <div className="absolute inset-0 bg-black/30 z-[1]" />
 
       <div className="relative z-10 flex flex-col items-center gap-8">
-        {/* Duck animation */}
+        {/* Duck SVG with animations */}
         <div className="relative">
-          <div className="absolute inset-0 w-32 h-32 rounded-full bg-accent/20 blur-xl animate-pulse" />
-          <div className="relative w-32 h-32 flex items-center justify-center">
-            <span
-              className="text-8xl drop-shadow-lg"
-              style={{
-                animation: "duckWalk 0.6s ease-in-out infinite alternate",
-              }}
-            >
-              🦆
-            </span>
-          </div>
-          {/* Shadow */}
-          <div
-            className="mx-auto w-20 h-3 rounded-full bg-foreground/10 blur-sm"
+          <div className="absolute inset-0 w-40 h-40 rounded-full bg-primary/20 blur-2xl animate-pulse" />
+          <img
+            src={simbSvg}
+            alt="Pato"
+            className="relative w-40 h-40 drop-shadow-2xl"
             style={{
-              animation: "duckShadow 0.6s ease-in-out infinite alternate",
+              animation: "duckBounce 1.5s ease-in-out infinite, duckFadeIn 0.8s ease-out",
             }}
           />
         </div>
 
         {/* Message */}
         <div className="text-center space-y-2">
-          <p className="font-display font-semibold text-lg text-foreground animate-fade-in" key={msgIndex}>
+          <p className="font-display font-semibold text-lg text-white drop-shadow-lg animate-fade-in" key={msgIndex}>
             {messages[msgIndex]}{dots}
           </p>
         </div>
 
         {/* Progress bar */}
         <div className="w-64">
-          <div className="h-2 rounded-full bg-muted overflow-hidden">
+          <div className="h-2 rounded-full bg-white/20 overflow-hidden backdrop-blur-sm">
             <div
               className="h-full rounded-full bg-gradient-to-r from-primary to-accent transition-all duration-300 ease-out"
               style={{ width: `${Math.min(progress, 100)}%` }}
             />
           </div>
-          <p className="text-xs text-muted-foreground text-center mt-2">
+          <p className="text-xs text-white/70 text-center mt-2 font-medium">
             {Math.min(Math.round(progress), 100)}%
           </p>
         </div>
       </div>
 
       <style>{`
-        @keyframes duckWalk {
-          0% { transform: translateX(-8px) rotate(-5deg); }
-          100% { transform: translateX(8px) rotate(5deg); }
+        @keyframes duckBounce {
+          0%, 100% { transform: translateY(0) rotate(-2deg); }
+          50% { transform: translateY(-12px) rotate(2deg); }
         }
-        @keyframes duckShadow {
-          0% { transform: translateX(-8px) scaleX(0.8); }
-          100% { transform: translateX(8px) scaleX(1.2); }
+        @keyframes duckFadeIn {
+          0% { opacity: 0; transform: scale(0.8) translateY(20px); }
+          100% { opacity: 1; transform: scale(1) translateY(0); }
         }
       `}</style>
     </div>
