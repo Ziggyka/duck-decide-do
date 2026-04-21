@@ -42,27 +42,12 @@ export interface ChecklistItem {
 interface CreateQuackModalProps {
   open: boolean;
   onClose: () => void;
-  onSave: (quack: QuackData) => void;
-  editingQuack?: QuackData | null;
+  onCreated?: (quack: Quack) => void;
+  editingQuack?: Quack | null;
 }
 
-export interface QuackData {
-  id: string;
-  title: string;
-  description: string;
-  category: string;
-  tags: string[];
-  status: QuackStatus;
-  rating: number;
-  taggedFriends: typeof fakeFriends;
-  responsiblePeople: typeof fakeFriends;
-  checklist: ChecklistItem[];
-  startDate?: Date;
-  endDate?: Date;
-  createdAt: Date;
-  updates: { text: string; date: Date }[];
-  progress: number;
-}
+// Re-export for legacy imports
+export type QuackData = Quack;
 
 const statusOptions: { value: QuackStatus; label: string; emoji: string; color: string }[] = [
   { value: "quero_fazer", label: "Quero fazer", emoji: "📌", color: "bg-primary/15 text-primary border-primary/30" },
