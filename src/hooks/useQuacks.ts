@@ -69,13 +69,14 @@ export const useQuacks = (scope: "feed" | "self" | string = "feed") => {
 
   const createQuack = async (input: QuackInput) => {
     if (!user) return { error: new Error("not authenticated") };
-    const { data, error } = await supabase.from("quacks").insert({ ...input, user_id: user.id }).select("*, author:profiles!quacks_user_id_fkey(username, display_name, avatar_url)").single();
+    const payload = { ...input, user_id: user.id } as never;
+    const { data, error } = await supabase.from("quacks").insert(payload).select("*, author:profiles!quacks_user_id_fkey(username, display_name, avatar_url)").single();
     if (!error && data) setQuacks(prev => [data as unknown as Quack, ...prev]);
     return { data, error };
   };
 
   const updateQuack = async (id: string, patch: Partial<QuackInput>) => {
-    const { data, error } = await supabase.from("quacks").update(patch).eq("id", id).select("*, author:profiles!quacks_user_id_fkey(username, display_name, avatar_url)").single();
+    const { data, error } = await supabase.from("quacks").update(patch as never).eq("id", id).select("*, author:profiles!quacks_user_id_fkey(username, display_name, avatar_url)").single();
     if (!error && data) setQuacks(prev => prev.map(q => q.id === id ? (data as unknown as Quack) : q));
     return { data, error };
   };
