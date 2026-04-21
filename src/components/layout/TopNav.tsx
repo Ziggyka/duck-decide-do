@@ -1,30 +1,37 @@
 import { useState } from "react";
-import { Search, Bell, Plus, ChevronDown, Settings } from "lucide-react";
+import { Search, Bell, Plus, ChevronDown, Settings, LogOut, User as UserIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import logotipo from "@/assets/logotipo.svg";
 import duckAvatar1 from "@/assets/duck-avatar-1.png";
 import CreateQuackModal from "@/components/quack/CreateQuackModal";
-import type { QuackData } from "@/components/quack/CreateQuackModal";
 import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContext";
+import { useProfile } from "@/hooks/useProfile";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 const TopNav = () => {
   const navigate = useNavigate();
+  const { signOut } = useAuth();
+  const { profile } = useProfile();
   const [showCreateQuack, setShowCreateQuack] = useState(false);
-  const unreadCount = 3;
+  const unreadCount = 0;
 
-  const handleSaveQuack = (quack: QuackData) => {
-    toast.success("Quack criado! 🦆🎉");
+  const handleSignOut = async () => {
+    await signOut();
+    toast.success("Até logo, pato! 👋");
+    navigate("/login", { replace: true });
   };
+
+  const avatar = profile?.avatar_url || duckAvatar1;
+  const displayName = profile?.display_name || profile?.username || "Pato";
 
   return (
     <>
       <nav className="nav-top">
-        {/* Logo */}
         <div className="flex items-center gap-2 mr-4 cursor-pointer flex-shrink-0" onClick={() => navigate("/")}>
           <img src={logotipo} alt="Pato App" className="h-8 w-auto" />
         </div>
 
-        {/* Search */}
         <div className="flex-1 max-w-md">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -36,7 +43,6 @@ const TopNav = () => {
           </div>
         </div>
 
-        {/* Actions */}
         <div className="flex items-center gap-3 ml-auto">
           <button
             onClick={() => setShowCreateQuack(true)}
@@ -46,7 +52,6 @@ const TopNav = () => {
             Criar Quack
           </button>
 
-          {/* Notifications - navigate to page */}
           <button
             onClick={() => navigate("/notifications")}
             className="relative p-2 rounded-xl hover:bg-secondary-foreground/10 transition-colors"
@@ -66,21 +71,34 @@ const TopNav = () => {
             <Settings className="w-5 h-5 text-secondary-foreground" />
           </button>
 
-          <button
-            onClick={() => navigate("/profile")}
-            className="flex items-center gap-2 p-1 pr-3 rounded-xl hover:bg-secondary-foreground/10 transition-colors"
-          >
-            <img src={duckAvatar1} alt="avatar" className="w-8 h-8 rounded-full bg-duck-yellow-light border-2 border-primary" />
-            <span className="text-sm font-medium text-secondary-foreground">QuackMaster</span>
-            <ChevronDown className="w-3 h-3 text-secondary-foreground/60" />
-          </button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="flex items-center gap-2 p-1 pr-3 rounded-xl hover:bg-secondary-foreground/10 transition-colors">
+                <img src={avatar} alt="avatar" className="w-8 h-8 rounded-full bg-duck-yellow-light border-2 border-primary object-cover" />
+                <span className="text-sm font-medium text-secondary-foreground">{displayName}</span>
+                <ChevronDown className="w-3 h-3 text-secondary-foreground/60" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuItem onClick={() => navigate("/profile")} className="gap-2 cursor-pointer">
+                <UserIcon className="w-4 h-4" /> Meu perfil
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate("/settings")} className="gap-2 cursor-pointer">
+                <Settings className="w-4 h-4" /> Configurações
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleSignOut} className="gap-2 cursor-pointer text-destructive focus:text-destructive">
+                <LogOut className="w-4 h-4" /> Sair
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </nav>
 
       <CreateQuackModal
         open={showCreateQuack}
         onClose={() => setShowCreateQuack(false)}
-        onSave={handleSaveQuack}
+        onCreated={() => setShowCreateQuack(false)}
         editingQuack={null}
       />
     </>

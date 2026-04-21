@@ -1,12 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
 import { toast } from "sonner";
 import bgLogin from "@/assets/bg-login.svg";
 import simbSvg from "@/assets/simb.svg";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
@@ -17,6 +20,10 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    if (user) navigate("/", { replace: true });
+  }, [user, navigate]);
 
   const validate = () => {
     const e: Record<string, string> = {};
@@ -33,7 +40,7 @@ const LoginPage = () => {
     setErrors(validate());
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const errs = validate();
     setErrors(errs);
@@ -43,8 +50,37 @@ const LoginPage = () => {
       return;
     }
     setLoading(true);
-    toast.success(isSignup ? "Conta criada com sucesso! 🦆" : "Login realizado! 🦆");
-    setTimeout(() => navigate("/loading"), 800);
+    try {
+      if (isSignup) {
+        const redirectUrl = `${window.location.origin}/`;
+        const { error } = await supabase.auth.signUp({
+          email, password,
+          options: {
+            emailRedirectTo: redirectUrl,
+            data: { display_name: name, username: name.toLowerCase().replace(/\s+/g, "_") },
+          },
+        });
+        if (error) throw error;
+        toast.success("Conta criada! 🦆");
+        navigate("/loading");
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        toast.success("Bem-vindo de volta! 🦆");
+        navigate("/loading");
+      }
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Erro desconhecido";
+      if (msg.includes("already registered") || msg.includes("already been")) {
+        toast.error("Este email já está cadastrado. Tente entrar.");
+      } else if (msg.includes("Invalid login")) {
+        toast.error("Email ou senha incorretos");
+      } else {
+        toast.error(msg);
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const inputClass = (field: string) =>
