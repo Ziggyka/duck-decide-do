@@ -55,7 +55,9 @@ const statusOptions: { value: QuackStatus; label: string; emoji: string; color: 
   { value: "feito", label: "Feito", emoji: "✅", color: "bg-success/15 text-success border-success/30" },
 ];
 
-const CreateQuackModal = ({ open, onClose, onSave, editingQuack }: CreateQuackModalProps) => {
+const CreateQuackModal = ({ open, onClose, onCreated, editingQuack }: CreateQuackModalProps) => {
+  const { createQuack, updateQuack } = useQuacks("self");
+  const [saving, setSaving] = useState(false);
   const [title, setTitle] = useState(editingQuack?.title || "");
   const [description, setDescription] = useState(editingQuack?.description || "");
   const [category, setCategory] = useState(editingQuack?.category || "");
@@ -63,11 +65,11 @@ const CreateQuackModal = ({ open, onClose, onSave, editingQuack }: CreateQuackMo
   const [tagInput, setTagInput] = useState("");
   const [status, setStatus] = useState<QuackStatus>(editingQuack?.status || "quero_fazer");
   const [rating, setRating] = useState(editingQuack?.rating || 0);
-  const [startDate, setStartDate] = useState<Date | undefined>(editingQuack?.startDate);
-  const [endDate, setEndDate] = useState<Date | undefined>(editingQuack?.endDate);
-  const [taggedFriends, setTaggedFriends] = useState<typeof fakeFriends>(editingQuack?.taggedFriends || []);
-  const [responsiblePeople, setResponsiblePeople] = useState<typeof fakeFriends>(editingQuack?.responsiblePeople || []);
-  const [checklist, setChecklist] = useState<ChecklistItem[]>(editingQuack?.checklist || []);
+  const [startDate, setStartDate] = useState<Date | undefined>(editingQuack?.start_date ? new Date(editingQuack.start_date) : undefined);
+  const [endDate, setEndDate] = useState<Date | undefined>(editingQuack?.end_date ? new Date(editingQuack.end_date) : undefined);
+  const [taggedFriends, setTaggedFriends] = useState<typeof fakeFriends>((editingQuack?.tagged_friends as typeof fakeFriends) || []);
+  const [responsiblePeople, setResponsiblePeople] = useState<typeof fakeFriends>((editingQuack?.responsible_people as typeof fakeFriends) || []);
+  const [checklist, setChecklist] = useState<ChecklistItem[]>((editingQuack?.checklist as ChecklistItem[]) || []);
   const [checklistInput, setChecklistInput] = useState("");
   const [friendSearch, setFriendSearch] = useState("");
   const [showFriendPicker, setShowFriendPicker] = useState(false);
@@ -107,28 +109,46 @@ const CreateQuackModal = ({ open, onClose, onSave, editingQuack }: CreateQuackMo
     setChecklist(checklist.filter(item => item.id !== id));
   };
 
-  const handleSave = (saveStatus?: QuackStatus) => {
-    if (!title.trim()) return;
+  const handleSave = async (saveStatus?: QuackStatus) => {
+    if (!title.trim()) {
+      toast.error("Adicione um título");
+      return;
+    }
+    if (saving) return;
+    setSaving(true);
     const finalStatus = saveStatus || status;
-    const quack: QuackData = {
-      id: editingQuack?.id || crypto.randomUUID(),
+    const payload = {
       title,
       description,
       category,
       tags,
       status: finalStatus,
       rating: finalStatus === "feito" ? rating : 0,
-      taggedFriends,
-      responsiblePeople,
+      tagged_friends: taggedFriends,
+      responsible_people: responsiblePeople,
       checklist,
-      startDate,
-      endDate,
-      createdAt: editingQuack?.createdAt || new Date(),
-      updates: editingQuack?.updates || [],
+      start_date: startDate ? startDate.toISOString().slice(0, 10) : null,
+      end_date: endDate ? endDate.toISOString().slice(0, 10) : null,
       progress: finalStatus === "feito" ? 100 : finalStatus === "fazendo" ? 50 : 0,
     };
-    onSave(quack);
-    onClose();
+    try {
+      if (editingQuack) {
+        const { data, error } = await updateQuack(editingQuack.id, payload);
+        if (error) throw error;
+        toast.success("Quack atualizado! ✨");
+        if (data) onCreated?.(data as Quack);
+      } else {
+        const { data, error } = await createQuack(payload);
+        if (error) throw error;
+        toast.success("Quack publicado! 🦆🎉");
+        if (data) onCreated?.(data as Quack);
+      }
+      onClose();
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Erro ao salvar");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const openFriendPicker = (mode: "tag" | "responsible") => {
