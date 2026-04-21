@@ -52,7 +52,7 @@ const statusMeta: Record<string, { label: string; emoji: string; color: string }
 };
 
 const ProfilePage = () => {
-  const { profile, loading: profileLoading } = useProfile();
+  const { profile, loading: profileLoading, updateProfile } = useProfile();
   const { quacks, loading: quacksLoading, deleteQuack, refetch } = useQuacks("self");
   const [activeTab, setActiveTab] = useState("Atividades");
   const [avatarModalOpen, setAvatarModalOpen] = useState(false);
@@ -79,11 +79,9 @@ const ProfilePage = () => {
   };
 
   const handleAvatarSave = async (url: string) => {
-    // delegated to AvatarCustomizeModal which doesn't use profile hook directly,
-    // so handle here via a quick update prompt is not needed: AvatarCustomizeModal calls onSave with selected url
-    // We'll persist via profile hook
-    const { useProfile: _ } = { useProfile };
-    void _;
+    const { error } = await updateProfile({ avatar_url: url });
+    if (error) toast.error("Erro ao atualizar avatar");
+    else toast.success("Avatar atualizado! 🦆");
   };
 
   const handleDeleteQuack = async (id: string) => {
@@ -324,11 +322,7 @@ const ProfilePage = () => {
         open={avatarModalOpen}
         onClose={() => setAvatarModalOpen(false)}
         currentAvatar={avatar}
-        onSave={async (url) => {
-          // Persist via direct supabase call through profile hook
-          const event = new CustomEvent("update-avatar", { detail: url });
-          window.dispatchEvent(event);
-        }}
+        onSave={handleAvatarSave}
       />
 
       <CreateQuackModal
