@@ -14,16 +14,169 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      friendships: {
+        Row: {
+          addressee_id: string
+          created_at: string
+          id: string
+          requester_id: string
+          status: Database["public"]["Enums"]["friendship_status"]
+        }
+        Insert: {
+          addressee_id: string
+          created_at?: string
+          id?: string
+          requester_id: string
+          status?: Database["public"]["Enums"]["friendship_status"]
+        }
+        Update: {
+          addressee_id?: string
+          created_at?: string
+          id?: string
+          requester_id?: string
+          status?: Database["public"]["Enums"]["friendship_status"]
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          actor_id: string | null
+          created_at: string
+          id: string
+          link: string | null
+          message: string
+          read: boolean
+          type: string
+          user_id: string
+        }
+        Insert: {
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          link?: string | null
+          message: string
+          read?: boolean
+          type: string
+          user_id: string
+        }
+        Update: {
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          link?: string | null
+          message?: string
+          read?: boolean
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_skin: string | null
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          level: number
+          updated_at: string
+          username: string
+          xp: number
+        }
+        Insert: {
+          avatar_skin?: string | null
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          id: string
+          level?: number
+          updated_at?: string
+          username: string
+          xp?: number
+        }
+        Update: {
+          avatar_skin?: string | null
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          level?: number
+          updated_at?: string
+          username?: string
+          xp?: number
+        }
+        Relationships: []
+      }
+      quacks: {
+        Row: {
+          category: string | null
+          checklist: Json
+          created_at: string
+          description: string | null
+          end_date: string | null
+          id: string
+          progress: number
+          rating: number
+          responsible_people: Json
+          start_date: string | null
+          status: Database["public"]["Enums"]["quack_status"]
+          tagged_friends: Json
+          tags: string[] | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          checklist?: Json
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          progress?: number
+          rating?: number
+          responsible_people?: Json
+          start_date?: string | null
+          status?: Database["public"]["Enums"]["quack_status"]
+          tagged_friends?: Json
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          checklist?: Json
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          progress?: number
+          rating?: number
+          responsible_people?: Json
+          start_date?: string | null
+          status?: Database["public"]["Enums"]["quack_status"]
+          tagged_friends?: Json
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      are_friends: { Args: { _a: string; _b: string }; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      friendship_status: "pending" | "accepted" | "blocked"
+      quack_status: "quero_fazer" | "fazendo" | "feito"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +303,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      friendship_status: ["pending", "accepted", "blocked"],
+      quack_status: ["quero_fazer", "fazendo", "feito"],
+    },
   },
 } as const
