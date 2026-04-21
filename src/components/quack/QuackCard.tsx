@@ -81,9 +81,9 @@ const QuackCard = ({ quack, onEdit, onDelete }: QuackCardProps) => {
       )}
 
       {/* Friends */}
-      {quack.taggedFriends.length > 0 && (
+      {quack.tagged_friends && quack.tagged_friends.length > 0 && (
         <div className="flex items-center gap-1.5 mb-2 text-xs text-muted-foreground">
-          <Users className="w-3.5 h-3.5" /> {quack.taggedFriends.map(f => f.name).join(", ")}
+          <Users className="w-3.5 h-3.5" /> {quack.tagged_friends.map(f => f.name).join(", ")}
         </div>
       )}
 
