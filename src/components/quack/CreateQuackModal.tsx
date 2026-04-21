@@ -136,12 +136,12 @@ const CreateQuackModal = ({ open, onClose, onCreated, editingQuack }: CreateQuac
         const { data, error } = await updateQuack(editingQuack.id, payload);
         if (error) throw error;
         toast.success("Quack atualizado! ✨");
-        if (data) onCreated?.(data as Quack);
+        if (data) onCreated?.(data as unknown as Quack);
       } else {
         const { data, error } = await createQuack(payload);
         if (error) throw error;
         toast.success("Quack publicado! 🦆🎉");
-        if (data) onCreated?.(data as Quack);
+        if (data) onCreated?.(data as unknown as Quack);
       }
       onClose();
     } catch (err: unknown) {
