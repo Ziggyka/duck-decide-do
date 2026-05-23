@@ -23,9 +23,9 @@ const RightSidebar = () => {
   const handleUnfriend = (name: string) => { setFriends(prev => prev.filter(f => f.name !== name)); toast(`Amizade com ${name} desfeita`); };
 
   const cardClass = "rounded-2xl border p-4 shadow-sm hover:shadow-md transition-shadow duration-200";
-  const cardBg = "bg-white/20 border-white/20";
-  const textMain = "text-[hsl(var(--sidebar-right-fg))]";
-  const textMuted = "text-[hsl(var(--sidebar-right-fg))]/60";
+  const cardBg = "bg-card border-border/60";
+  const textMain = "text-foreground";
+  const textMuted = "text-muted-foreground";
 
   return (
     <aside className="sidebar-right py-4 px-3 flex flex-col gap-4">
@@ -38,14 +38,14 @@ const RightSidebar = () => {
         <div className="space-y-2.5">
           {visibleFriends.map((f) => (
             <div key={f.name} className="flex items-center gap-2.5 group">
-              <img src={f.avatar} alt={f.name} className="w-8 h-8 rounded-full bg-white/40 border border-white/30" />
+              <img src={f.avatar} alt={f.name} className="w-8 h-8 rounded-full bg-duck-yellow-light border border-border" />
               <div className="flex-1 min-w-0">
                 <p className={`text-sm font-medium truncate ${textMain}`}>{f.name}</p>
                 <p className={`text-xs ${textMuted}`}>{f.status}</p>
               </div>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="opacity-0 group-hover:opacity-100 p-1 rounded-lg hover:bg-white/20 transition-all">
+                  <button className="opacity-0 group-hover:opacity-100 p-1 rounded-lg hover:bg-muted transition-all">
                     <MoreVertical className={`w-4 h-4 ${textMuted}`} />
                   </button>
                 </DropdownMenuTrigger>
@@ -73,7 +73,7 @@ const RightSidebar = () => {
           Convites
         </h3>
         <div className="space-y-2">
-          <div className="flex items-center justify-between p-2 rounded-xl bg-white/15">
+          <div className="flex items-center justify-between p-2 rounded-xl bg-muted/60">
             <div>
               <p className={`text-sm font-medium ${textMain}`}>Turma do Cinema</p>
               <p className={`text-xs ${textMuted}`}>5 membros</p>
@@ -91,14 +91,14 @@ const RightSidebar = () => {
           <Calendar className={`w-4 h-4 ${textMain}`} />
           Próximo Evento
         </h3>
-        <div className="p-3 rounded-xl bg-white/15">
+        <div className="p-3 rounded-xl bg-muted/60">
           <p className={`text-sm font-semibold ${textMain}`}>Noite de Board Games</p>
           <p className={`text-xs ${textMuted} mt-1`}>Sábado, 20:00 • 6 participantes</p>
           <div className="flex -space-x-2 mt-2">
             {[duckAvatar2, duckAvatar3, duckAvatar2].map((a, i) => (
-              <img key={i} src={a} alt="" className="w-6 h-6 rounded-full border-2 border-white/30 bg-white/40" />
+              <img key={i} src={a} alt="" className="w-6 h-6 rounded-full border-2 border-border bg-duck-yellow-light" />
             ))}
-            <span className={`w-6 h-6 rounded-full border-2 border-white/30 bg-white/30 flex items-center justify-center text-[10px] font-bold ${textMain}`}>+3</span>
+            <span className={`w-6 h-6 rounded-full border-2 border-border bg-muted flex items-center justify-center text-[10px] font-bold ${textMain}`}>+3</span>
           </div>
         </div>
       </div>
