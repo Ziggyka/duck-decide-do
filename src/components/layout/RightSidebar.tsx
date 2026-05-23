@@ -23,9 +23,9 @@ const RightSidebar = () => {
   const handleUnfriend = (name: string) => { setFriends(prev => prev.filter(f => f.name !== name)); toast(`Amizade com ${name} desfeita`); };
 
   const cardClass = "rounded-2xl border p-4 shadow-sm hover:shadow-md transition-shadow duration-200";
-  const cardBg = "bg-white/20 border-white/20";
-  const textMain = "text-[hsl(var(--sidebar-right-fg))]";
-  const textMuted = "text-[hsl(var(--sidebar-right-fg))]/60";
+  const cardBg = "bg-card border-border/60";
+  const textMain = "text-foreground";
+  const textMuted = "text-muted-foreground";
 
   return (
     <aside className="sidebar-right py-4 px-3 flex flex-col gap-4">
