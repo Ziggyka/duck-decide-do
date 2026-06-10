@@ -625,7 +625,7 @@ const CreateQuackModal = ({ open, onClose, onSave, editingQuack }: CreateQuackMo
                 <p className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground mb-2">Atividade</p>
                 <div className="space-y-1.5">
                   <SideAction icon={Sparkles} label={`Status: ${statusOptions.find(s => s.value === status)?.label}`} active={openPanel === "status"} onClick={() => togglePanel("status")} />
-                  <SideAction icon={ImageIcon} label="Capa" active={openPanel === "cover"} onClick={() => togglePanel("cover")} />
+                  <SideAction icon={ImageIcon} label={cover ? "Imagem adicionada" : icon ? `Ícone: ${icon}` : "Capa / Ícone"} active={openPanel === "cover"} onClick={() => togglePanel("cover")} />
                   <SideAction icon={Lock} label={`Privacidade: ${privacyOptions.find(p => p.value === privacy)?.label}`} active={openPanel === "privacy"} onClick={() => togglePanel("privacy")} />
                 </div>
               </div>
