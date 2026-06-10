@@ -108,6 +108,120 @@ const SideAction = ({ icon: Icon, label, onClick, active }: { icon: any; label: 
   </button>
 );
 
+const ICON_LIBRARY: { category: string; icons: { emoji: string; name: string }[] }[] = [
+  { category: "📚 Estudos", icons: [{ emoji: "📚", name: "livro estudo" }, { emoji: "✏️", name: "lapis" }, { emoji: "🎓", name: "formatura" }, { emoji: "📝", name: "anotacao" }, { emoji: "🧪", name: "ciencia" }] },
+  { category: "💪 Exercícios", icons: [{ emoji: "💪", name: "musculo treino" }, { emoji: "🏃", name: "corrida" }, { emoji: "🧘", name: "yoga" }, { emoji: "🚴", name: "bike" }, { emoji: "🏋️", name: "academia" }] },
+  { category: "🎮 Games", icons: [{ emoji: "🎮", name: "game console" }, { emoji: "🕹️", name: "arcade" }, { emoji: "👾", name: "pixel" }, { emoji: "🎲", name: "dado" }] },
+  { category: "🎵 Música", icons: [{ emoji: "🎵", name: "musica nota" }, { emoji: "🎸", name: "guitarra" }, { emoji: "🎧", name: "fone" }, { emoji: "🎤", name: "microfone" }] },
+  { category: "🎬 Filmes", icons: [{ emoji: "🎬", name: "filme cinema" }, { emoji: "🍿", name: "pipoca" }, { emoji: "📺", name: "tv serie" }, { emoji: "🎌", name: "anime" }] },
+  { category: "✈️ Viagens", icons: [{ emoji: "✈️", name: "aviao" }, { emoji: "🗺️", name: "mapa" }, { emoji: "🏖️", name: "praia" }, { emoji: "🏔️", name: "montanha" }] },
+  { category: "🍔 Gastronomia", icons: [{ emoji: "🍔", name: "hamburguer" }, { emoji: "🍕", name: "pizza" }, { emoji: "🍣", name: "sushi" }, { emoji: "🍜", name: "ramen" }, { emoji: "🍳", name: "cozinhar" }] },
+  { category: "🧠 Desenvolvimento", icons: [{ emoji: "🧠", name: "cerebro mente" }, { emoji: "💡", name: "ideia" }, { emoji: "📖", name: "leitura" }] },
+  { category: "💼 Trabalho", icons: [{ emoji: "💼", name: "trabalho" }, { emoji: "💻", name: "laptop" }, { emoji: "📊", name: "grafico" }] },
+  { category: "🎨 Arte", icons: [{ emoji: "🎨", name: "arte pintura" }, { emoji: "🖌️", name: "pincel" }, { emoji: "✂️", name: "diy" }] },
+  { category: "📸 Fotografia", icons: [{ emoji: "📸", name: "camera foto" }, { emoji: "🌄", name: "paisagem" }] },
+  { category: "🏆 Conquistas", icons: [{ emoji: "🏆", name: "trofeu" }, { emoji: "🥇", name: "medalha ouro" }, { emoji: "⭐", name: "estrela" }] },
+  { category: "❤️ Bem-estar", icons: [{ emoji: "❤️", name: "coracao saude" }, { emoji: "🌱", name: "natureza" }, { emoji: "🧘‍♀️", name: "meditacao" }] },
+  { category: "🦆 Pato", icons: [{ emoji: "🦆", name: "pato duck" }, { emoji: "🐤", name: "patinho" }, { emoji: "🥚", name: "ovo" }] },
+];
+
+const CoverIconPicker = ({ cover, icon, setCover, setIcon, iconSearch, setIconSearch, handleFileUpload }: {
+  cover?: string; icon?: string;
+  setCover: (v?: string) => void;
+  setIcon: (v?: string) => void;
+  iconSearch: string;
+  setIconSearch: (v: string) => void;
+  handleFileUpload: (f?: File) => void;
+}) => {
+  const [dragOver, setDragOver] = useState(false);
+
+  const filteredCategories = ICON_LIBRARY.map(cat => ({
+    ...cat,
+    icons: iconSearch
+      ? cat.icons.filter(i => i.name.toLowerCase().includes(iconSearch.toLowerCase()))
+      : cat.icons,
+  })).filter(c => c.icons.length > 0);
+
+  return (
+    <div className="rounded-2xl border border-border bg-background/50 p-4 animate-fade-in space-y-4">
+      <SectionLabel icon={ImageIcon}>Imagem da atividade</SectionLabel>
+
+      {/* Preview */}
+      {(cover || icon) && (
+        <div className="relative w-full h-36 rounded-2xl overflow-hidden bg-muted flex items-center justify-center">
+          {cover ? (
+            <img src={cover} alt="capa" className="w-full h-full object-cover" />
+          ) : (
+            <span className="text-7xl">{icon}</span>
+          )}
+          <button
+            onClick={() => { setCover(undefined); setIcon(undefined); }}
+            className="absolute top-2 right-2 p-1.5 rounded-full bg-foreground/60 text-white hover:bg-foreground"
+          >
+            <X className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
+
+      {/* Upload area */}
+      <label
+        onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+        onDragLeave={() => setDragOver(false)}
+        onDrop={(e) => {
+          e.preventDefault();
+          setDragOver(false);
+          handleFileUpload(e.dataTransfer.files?.[0]);
+        }}
+        className={cn(
+          "block w-full h-28 rounded-2xl border-2 border-dashed transition-all cursor-pointer flex flex-col items-center justify-center gap-2",
+          dragOver ? "border-primary bg-primary/10 text-primary" : "border-border hover:border-primary/40 text-muted-foreground hover:text-primary"
+        )}
+      >
+        <input type="file" accept="image/*" className="hidden" onChange={(e) => handleFileUpload(e.target.files?.[0])} />
+        <ImageIcon className="w-6 h-6" />
+        <span className="text-xs font-semibold">Arraste, solte ou clique para fazer upload</span>
+        <span className="text-[10px]">PNG, JPG, GIF</span>
+      </label>
+
+      {/* Icon picker */}
+      <div className="rounded-2xl border border-border bg-card p-3">
+        <p className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground mb-2">Escolha um ícone para representar seu Quack</p>
+        <div className="relative mb-3">
+          <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
+          <input
+            value={iconSearch}
+            onChange={(e) => setIconSearch(e.target.value)}
+            placeholder="Buscar ícones..."
+            className="w-full pl-9 pr-3 py-1.5 rounded-xl border border-border bg-background text-xs focus:outline-none focus:ring-2 focus:ring-primary/30"
+          />
+        </div>
+        <div className="max-h-64 overflow-y-auto space-y-3 pr-1">
+          {filteredCategories.map((cat) => (
+            <div key={cat.category}>
+              <p className="text-[11px] font-semibold text-muted-foreground mb-1.5">{cat.category}</p>
+              <div className="grid grid-cols-8 gap-1.5">
+                {cat.icons.map((ic) => (
+                  <button
+                    key={ic.emoji}
+                    onClick={() => { setIcon(ic.emoji); setCover(undefined); }}
+                    title={ic.name}
+                    className={cn(
+                      "aspect-square rounded-xl flex items-center justify-center text-xl transition-all hover:scale-110 hover:bg-muted",
+                      icon === ic.emoji ? "border-2 border-primary bg-primary/10" : "border border-transparent"
+                    )}
+                  >
+                    {ic.emoji}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const CreateQuackModal = ({ open, onClose, onSave, editingQuack }: CreateQuackModalProps) => {
   const [title, setTitle] = useState(editingQuack?.title || "");
   const [description, setDescription] = useState(editingQuack?.description || "");
