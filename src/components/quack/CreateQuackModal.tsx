@@ -442,13 +442,15 @@ const CreateQuackModal = ({ open, onClose, onSave, editingQuack }: CreateQuackMo
               )}
 
               {openPanel === "cover" && (
-                <div className="rounded-2xl border border-border bg-background/50 p-4 animate-fade-in">
-                  <SectionLabel icon={ImageIcon}>Capa</SectionLabel>
-                  <button className="w-full h-32 rounded-xl border-2 border-dashed border-border hover:border-primary/40 transition-colors flex flex-col items-center justify-center gap-2 text-muted-foreground hover:text-primary">
-                    <ImageIcon className="w-6 h-6" />
-                    <span className="text-xs font-medium">Adicionar imagem de capa</span>
-                  </button>
-                </div>
+                <CoverIconPicker
+                  cover={cover}
+                  icon={icon}
+                  setCover={setCover}
+                  setIcon={setIcon}
+                  iconSearch={iconSearch}
+                  setIconSearch={setIconSearch}
+                  handleFileUpload={handleFileUpload}
+                />
               )}
 
               {openPanel === "privacy" && (
