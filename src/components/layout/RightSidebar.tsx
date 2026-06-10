@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Calendar, UserPlus, MoreVertical, MessageCircle, EyeOff, UserMinus } from "lucide-react";
+import { Calendar, UserPlus, MoreVertical, EyeOff, UserMinus } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import duckAvatar2 from "@/assets/duck-avatar-2.png";
@@ -18,7 +18,6 @@ const RightSidebar = () => {
 
   const visibleFriends = friends.filter(f => !hidden.includes(f.name));
 
-  const handleChat = (name: string) => toast.success(`Chat com ${name} aberto! 💬`);
   const handleHide = (name: string) => { setHidden(prev => [...prev, name]); toast(`${name} ocultado`); };
   const handleUnfriend = (name: string) => { setFriends(prev => prev.filter(f => f.name !== name)); toast(`Amizade com ${name} desfeita`); };
 
@@ -50,9 +49,6 @@ const RightSidebar = () => {
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-44">
-                  <DropdownMenuItem onClick={() => handleChat(f.name)} className="gap-2 cursor-pointer">
-                    <MessageCircle className="w-4 h-4" /> Chamar para chat
-                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => handleHide(f.name)} className="gap-2 cursor-pointer">
                     <EyeOff className="w-4 h-4" /> Ocultar
                   </DropdownMenuItem>
