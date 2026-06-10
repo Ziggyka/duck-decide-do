@@ -1,10 +1,11 @@
-import { 
-  Newspaper, ListChecks, Shuffle, Users, Swords, Trophy, Award,
-  Camera, User, Settings, Flame, Sparkles, ChevronLeft, ChevronRight, MessageCircle
+import {
+  Newspaper, ListChecks, Shuffle, Users, Swords, Award,
+  User, Settings, Sparkles, ChevronLeft, ChevronRight, Flame
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSidebarCollapse } from "./AppLayout";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import duckAvatar1 from "@/assets/duck-avatar-1.png";
 
 const navItems = [
   { icon: Newspaper, label: "Feed", path: "/" },
@@ -14,8 +15,6 @@ const navItems = [
   { icon: Users, label: "Grupos", path: "/groups" },
   { icon: Swords, label: "Meus Desafios", path: "/challenges" },
   { icon: Award, label: "Conquistas", path: "/achievements" },
-  { icon: Camera, label: "Memórias", path: "/memories" },
-  { icon: MessageCircle, label: "Chat", path: "/chat" },
   { icon: User, label: "Perfil", path: "/profile" },
   { icon: Settings, label: "Configurações", path: "/settings" },
 ];
@@ -26,85 +25,87 @@ const LeftSidebar = () => {
   const { collapsed, setCollapsed } = useSidebarCollapse();
 
   return (
-    <aside className={`bg-sidebar text-sidebar-foreground border-r border-sidebar-border flex-shrink-0 h-[calc(100vh-4rem)] sticky top-16 overflow-y-auto py-4 px-3 flex flex-col gap-1 transition-all duration-300 ${collapsed ? "w-[72px]" : "w-60"}`}>
+    <aside className={`flex-shrink-0 h-[calc(100vh-4rem)] sticky top-16 overflow-y-auto py-4 px-3 flex flex-col gap-4 transition-all duration-300 ${collapsed ? "w-[88px]" : "w-64"}`}>
       <button
         onClick={() => setCollapsed(!collapsed)}
-        className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-white/15 transition-colors mb-2 self-end"
+        className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-muted transition-colors self-end"
         title={collapsed ? "Expandir" : "Recolher"}
       >
-        {collapsed ? <ChevronRight className="w-4 h-4 text-white/70" /> : <ChevronLeft className="w-4 h-4 text-white/70" />}
+        {collapsed ? <ChevronRight className="w-4 h-4 text-muted-foreground" /> : <ChevronLeft className="w-4 h-4 text-muted-foreground" />}
       </button>
 
-      {/* Streak Banner */}
-      {!collapsed && (
-        <div className="mb-3 flex items-center gap-3 rounded-2xl bg-white/15 border border-white/20 p-4 animate-fade-in">
-          <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
-            <Flame className="w-5 h-5 text-white" />
+      {/* Box 1: User Profile Card */}
+      {!collapsed ? (
+        <div className="rounded-[20px] overflow-hidden bg-secondary border border-border shadow-sm animate-fade-in">
+          {/* Cover */}
+          <div className="relative h-20 bg-primary">
+            <span className="absolute top-2 left-3 text-accent text-xl">⭐</span>
+            <span className="absolute top-3 right-4 text-accent text-2xl">⭐</span>
+            <span className="absolute bottom-1 right-8 text-accent text-lg">⭐</span>
           </div>
-          <div>
-            <p className="text-xs text-white/60">Streak</p>
-            <p className="font-display font-bold text-lg leading-none text-white">12 dias 🔥</p>
+          <div className="px-4 pb-4 -mt-8">
+            <img src={duckAvatar1} alt="" className="w-16 h-16 rounded-full border-4 border-secondary bg-duck-yellow-light mx-auto" />
+            <p className="text-center font-display font-bold text-base text-white mt-2">Quack Master</p>
+            <div className="flex items-center justify-center gap-2 mt-1.5">
+              <span className="px-2 py-0.5 rounded-full bg-primary text-primary-foreground text-[10px] font-bold">Lv.34</span>
+              <span className="flex items-center gap-1 text-white text-xs font-semibold">
+                <Flame className="w-3 h-3 text-accent" /> 126
+              </span>
+            </div>
+            <p className="text-center text-white/60 text-[11px] mt-1.5">Pato lendário</p>
+            {/* XP bar */}
+            <div className="mt-3">
+              <div className="flex items-center justify-between text-[10px] mb-1">
+                <span className="text-white/80 font-medium">XP</span>
+                <span className="text-white/50">2.450 / 3.000</span>
+              </div>
+              <div className="h-2 rounded-full bg-white/15 overflow-hidden">
+                <div className="h-full rounded-full bg-accent transition-all duration-700" style={{ width: "82%" }} />
+              </div>
+            </div>
           </div>
         </div>
-      )}
-      {collapsed && (
-        <div className="mb-3 flex items-center justify-center">
-          <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
-            <Flame className="w-5 h-5 text-white" />
-          </div>
+      ) : (
+        <div className="rounded-2xl bg-secondary p-2 flex flex-col items-center gap-1">
+          <img src={duckAvatar1} alt="" className="w-10 h-10 rounded-full border-2 border-primary bg-duck-yellow-light" />
+          <span className="text-[9px] font-bold text-white">Lv.34</span>
         </div>
       )}
 
-      {/* Nav Items */}
-      {navItems.map((item) => {
-        const isActive = location.pathname === item.path;
-        const isVidente = item.path === "/pato-vidente";
+      {/* Box 2: Navigation */}
+      <div className="rounded-[20px] bg-secondary border border-border shadow-sm p-2 flex flex-col gap-1">
+        {navItems.map((item) => {
+          const isActive = location.pathname === item.path;
+          const isVidente = item.path === "/pato-vidente";
 
-        const button = (
-          <button
-            key={item.path}
-            onClick={() => navigate(item.path)}
-            className={`nav-item transition-all duration-200 ${isActive ? "nav-item-active" : "nav-item-inactive"} ${isVidente && !isActive ? "text-accent hover:text-accent" : ""} ${collapsed ? "justify-center px-0" : ""}`}
-          >
-            <item.icon className={`w-5 h-5 flex-shrink-0 transition-transform duration-200 hover:scale-110 ${isVidente ? "text-accent" : ""}`} />
-            {!collapsed && <span>{item.label}</span>}
-            {!collapsed && isVidente && (
-              <span className="ml-auto text-[10px] font-bold bg-accent text-accent-foreground px-1.5 py-0.5 rounded-md">AI</span>
-            )}
-          </button>
-        );
-
-        if (collapsed) {
-          return (
-            <Tooltip key={item.path} delayDuration={0}>
-              <TooltipTrigger asChild>{button}</TooltipTrigger>
-              <TooltipContent side="right" className="font-medium">{item.label}</TooltipContent>
-            </Tooltip>
+          const button = (
+            <button
+              key={item.path}
+              onClick={() => navigate(item.path)}
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm font-medium transition-all duration-200 hover:scale-[1.02] ${
+                isActive
+                  ? "bg-primary text-primary-foreground shadow-md font-semibold"
+                  : "text-white/70 hover:bg-white/10 hover:text-white"
+              } ${collapsed ? "justify-center px-0" : ""}`}
+            >
+              <item.icon className="w-5 h-5 flex-shrink-0" />
+              {!collapsed && <span>{item.label}</span>}
+              {!collapsed && isVidente && (
+                <span className={`ml-auto text-[10px] font-bold px-1.5 py-0.5 rounded-md ${isActive ? "bg-white/20" : "bg-accent text-accent-foreground"}`}>AI</span>
+              )}
+            </button>
           );
-        }
-        return button;
-      })}
 
-      {/* Level indicator */}
-      <div className="mt-auto pt-4 px-2">
-        {!collapsed ? (
-          <>
-            <div className="flex items-center justify-between text-xs mb-1">
-              <span className="font-display font-semibold text-white">Nível 24</span>
-              <span className="text-white/50">2.450 / 3.000 XP</span>
-            </div>
-            <div className="h-3 rounded-full bg-white/15 overflow-hidden">
-              <div className="h-full rounded-full bg-white transition-all duration-700 ease-out" style={{ width: "82%" }} />
-            </div>
-          </>
-        ) : (
-          <div className="flex flex-col items-center gap-1">
-            <span className="text-[10px] font-bold text-white/60">Lv 24</span>
-            <div className="w-8 h-2 rounded-full bg-white/15 overflow-hidden">
-              <div className="h-full rounded-full bg-white" style={{ width: "82%" }} />
-            </div>
-          </div>
-        )}
+          if (collapsed) {
+            return (
+              <Tooltip key={item.path} delayDuration={0}>
+                <TooltipTrigger asChild>{button}</TooltipTrigger>
+                <TooltipContent side="right" className="font-medium">{item.label}</TooltipContent>
+              </Tooltip>
+            );
+          }
+          return button;
+        })}
       </div>
     </aside>
   );

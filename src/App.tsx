@@ -12,11 +12,9 @@ import QuacksPage from "./pages/QuacksPage";
 import DrawPage from "./pages/DrawPage";
 import GroupsPage from "./pages/GroupsPage";
 import ChallengesPage from "./pages/ChallengesPage";
-import MemoriesPage from "./pages/MemoriesPage";
 import RankingPage from "./pages/RankingPage";
 import PatoVidentePage from "./pages/PatoVidentePage";
 import SettingsPage from "./pages/SettingsPage";
-import ChatPage from "./pages/ChatPage";
 import AchievementsPage from "./pages/AchievementsPage";
 import NotificationsPage from "./pages/NotificationsPage";
 import NotFound from "./pages/NotFound";
@@ -40,11 +38,9 @@ const App = () => (
           <Route path="/groups" element={<GroupsPage />} />
           <Route path="/challenges" element={<ChallengesPage />} />
           <Route path="/achievements" element={<AchievementsPage />} />
-          <Route path="/memories" element={<MemoriesPage />} />
           <Route path="/ranking" element={<RankingPage />} />
           <Route path="/pato-vidente" element={<PatoVidentePage />} />
           <Route path="/settings" element={<SettingsPage />} />
-          <Route path="/chat" element={<ChatPage />} />
           <Route path="/notifications" element={<NotificationsPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
