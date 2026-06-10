@@ -70,6 +70,7 @@ export interface QuackData {
   priority?: string;
   link?: string;
   cover?: string;
+  icon?: string;
   privacy?: "public" | "friends" | "private";
 }
 
@@ -123,6 +124,9 @@ const CreateQuackModal = ({ open, onClose, onSave, editingQuack }: CreateQuackMo
   const [checklist, setChecklist] = useState<ChecklistItem[]>(editingQuack?.checklist || []);
   const [checklistInput, setChecklistInput] = useState("");
   const [link, setLink] = useState(editingQuack?.link || "");
+  const [cover, setCover] = useState<string | undefined>(editingQuack?.cover);
+  const [icon, setIcon] = useState<string | undefined>(editingQuack?.icon);
+  const [iconSearch, setIconSearch] = useState("");
   const [privacy, setPrivacy] = useState<"public" | "friends" | "private">(editingQuack?.privacy || "friends");
   const [friendSearch, setFriendSearch] = useState("");
   const [showFriendPicker, setShowFriendPicker] = useState(false);
@@ -171,9 +175,16 @@ const CreateQuackModal = ({ open, onClose, onSave, editingQuack }: CreateQuackMo
       createdAt: editingQuack?.createdAt || new Date(),
       updates: editingQuack?.updates || [],
       progress: finalStatus === "feito" ? 100 : finalStatus === "fazendo" ? 50 : 0,
-      priority, link, privacy,
+      priority, link, cover, icon, privacy,
     });
     onClose();
+  };
+
+  const handleFileUpload = (file?: File) => {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => setCover(e.target?.result as string);
+    reader.readAsDataURL(file);
   };
 
   const openFriendPicker = (mode: "tag" | "responsible") => {
